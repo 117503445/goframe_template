@@ -3,7 +3,7 @@ package packed
 import "github.com/gogf/gf/os/gres"
 
 func init() {
-	if err := gres.Add("H4sIAAAAAAAC/wrwZmYRYeBg4GC4UGkWxIAERBg4GYrLE9PTU4v0obReVnF+XmgIKwPjjddcCT2TDvodchBoe29zdEc6E6ui2p09L8/OZndOCW4rm1xWvtl6RcuXZ8oVkzKeJO15MVdYX3lBfuKutU65qt+u/Hw+u76srCyKmSHhGr+h2+mqgocs6m0us3ZuiD+/MVuOJSOCP2L3w40xokVLIviX3T6lGHWfw9fp5BRZlqyUip7pgkXK7BeyZEv3HvZbzj37d/SJyRuqauvibUyv63/+evhT8b4bZ+41ZE8sL9ynonHoysYEjuPpy3dPWa9SOP+Ssqr1J1Gp2fIrrn7YdPCTzeU5TtFzFkZyzBVRmHpkzZ0VD2/8L61nbfrQNsvqkdMmoQvrp8t2slff8TPouvK/541F386ZS4Lrdd6HbXY/0aUd0BymnXkxjO/lhG3P/85s6Tq7O65gnY+JzYqMn8HP7snfz35rMStje72324kFNcz344Nmaq52TZVOrffU/cnFwPD/f4A3O4fWhKVRjowMDArMDAywuGDAiAt2RFzAgx+kG1lNgDcjkwgzIi6RTQbFJQxsawSReGMWYRR2p0CAAMN/xx5GBiwOY2UDyTMxMDF0MjAwnGIE8QABAAD//zXlxphpAgAA"); err != nil {
+	if err := gres.Add("H4sIAAAAAAAC/wrwZmYRYeBg4GAIrzYLYkACIgycDMXlienpqUX6UFovqzg/LzSElYFx+zuuhJ5JB/0OOQi0vbc5uiOdiVVR7c6el2dnszunBLeVTS4r32y9ouXLM+WKSRlPkva8mCusr7wgP3HXWqdc1W9Xfj6fXV9Wlh7FzJBwjd/Q7XRVwUMW9TaXWTs3xJ/fmC3HkhHBH7H74cYY0aIlEfzLbp9SjLrP4et0coosS1ZKRc90wSJl9gtZsqV7D/st5579O/rE5A1VtXXxNqbX9T9/PfypeN+NM/casieWF+5T0Th0ZWMCx/H05bunrFcpnH9JWdX6k6jUbPkVVz9IxZlF+Rmc1dxyVHNW6wVPxiDPM6d6pfr+xptHKHDkr1iprKeizfi36ubEig3H37Is9vh7/kTf4xmzPa2+H/+UZ1rdsmYHk2nG1kliuU8n8GVW35vvuaKi+jr3uamdbeyiuvWn7rB92nutb3FnmXTCSQ7JKfkPfntrGaduXZGz+I3+StV4RgaG//8DvNk5qi2a7zkzMjAoMTMwwGKDASM22BGxAY8AkG5kNQHejEwizIjYRDYZFJswsK0RROKNW4RR2J0CAQIM/x37GBmwOIyVDSTPxMDE0MnAwHCGEcQDBAAA//+eNO4hawIAAA=="); err != nil {
 		panic("add binary content to resource manager failed: " + err.Error())
 	}
 }

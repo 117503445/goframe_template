@@ -1,6 +1,6 @@
 FROM golang:1.15 as build
 LABEL maintainer="117503445"
-ENV GO111MODULE=on
+ENV GO111MODULE=on GOPROXY=https://goproxy.cn,direct
 WORKDIR /root/project
 ADD go.mod .
 ADD go.sum .

@@ -1,5 +1,5 @@
 module goframe_learn
 
-require github.com/gogf/gf latest
+require github.com/gogf/gf v1.15.1
 
-go 1.11
+go 1.15

@@ -1,0 +1,33 @@
+{
+    "schemes": [
+        "http"
+    ],
+    "swagger": "2.0",
+    "info": {
+        "description": "`goframe_learn` 117503445 的 goframe 学习/模板项目 api",
+        "title": "goframe_learn API",
+        "contact": {},
+        "version": "1.0"
+    },
+    "paths": {
+        "/": {
+            "get": {
+                "produces": [
+                    "text/plain"
+                ],
+                "tags": [
+                    "Hello"
+                ],
+                "summary": "返回 Hello",
+                "responses": {
+                    "200": {
+                        "description": "Hello World!",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

@@ -6,8 +6,8 @@ ADD go.mod .
 ADD go.sum .
 RUN go mod download
 ADD . .
-RUN go get -u github.com/swaggo/swag/cmd/swag
-RUN swag i
+RUN wget https://goframe.org/cli/linux_amd64/gf && chmod +x gf && ./gf install
+RUN gf swagger --pack -y
 RUN GOOS=linux CGO_ENABLED=0 go build -ldflags="-s -w" -installsuffix cgo -o server_bin
 FROM alpine as prod
 EXPOSE 80

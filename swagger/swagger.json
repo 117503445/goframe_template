@@ -7,7 +7,7 @@
         "description": "`goframe_learn` 117503445 的 goframe 学习/模板项目 api",
         "title": "goframe_learn API",
         "contact": {},
-        "version": "1.0.5"
+        "version": "1.0.6"
     },
     "paths": {
         "/": {

@@ -12,12 +12,12 @@ import (
 //InitDatabase Create database if not exists
 func InitDatabase() {
 	link := g.Cfg().Get("database.link").(string)
-	g.Log().Line().Info(link)
+	// g.Log().Line().Info(link)
 
 	linkWithoutDbName := strings.Join(strings.Split(strings.Split(link, "/")[0], ":")[:][1:], ":") + "/"
 	dbName := strings.Split(link, "/")[1]
 
-	g.Log().Line().Info(linkWithoutDbName)
+	// g.Log().Line().Info(linkWithoutDbName)
 
 	sqlDB, err := sql.Open("mysql", linkWithoutDbName)
 	if err != nil {

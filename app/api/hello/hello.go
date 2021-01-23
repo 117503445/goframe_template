@@ -2,13 +2,14 @@ package hello
 
 import (
 	"github.com/gogf/gf/net/ghttp"
+	"goframe_learn/library/response"
 )
 
 // @summary 返回 Hello
 // @tags    Hello
-// @produce plain
+// @produce json
 // @router  / [GET]
-// @success 200 {string} string "Hello World!"
+// @success 200 {object} response.JsonResponse
 func Hello(r *ghttp.Request) {
-	r.Response.Writeln("Hello World!")
+	response.Json(r, 0, "","hello")
 }

@@ -7,13 +7,13 @@
         "description": "`goframe_learn` 117503445 的 goframe 学习/模板项目 api",
         "title": "goframe_learn API",
         "contact": {},
-        "version": "1.0.3"
+        "version": "1.0.4"
     },
     "paths": {
         "/": {
             "get": {
                 "produces": [
-                    "text/plain"
+                    "application/json"
                 ],
                 "tags": [
                     "Hello"
@@ -21,11 +21,30 @@
                 "summary": "返回 Hello",
                 "responses": {
                     "200": {
-                        "description": "Hello World!",
+                        "description": "OK",
                         "schema": {
-                            "type": "string"
+                            "$ref": "#/definitions/response.JsonResponse"
                         }
                     }
+                }
+            }
+        }
+    },
+    "definitions": {
+        "response.JsonResponse": {
+            "type": "object",
+            "properties": {
+                "code": {
+                    "description": "错误码((0:成功, 1:失败, \u003e1:错误码))",
+                    "type": "integer"
+                },
+                "data": {
+                    "description": "返回数据(业务接口定义具体数据结构)",
+                    "type": "object"
+                },
+                "msg": {
+                    "description": "提示信息",
+                    "type": "string"
                 }
             }
         }

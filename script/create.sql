@@ -14,13 +14,7 @@ CREATE TABLE `roles`  (
                           `name` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NULL,
                           PRIMARY KEY (`id`) USING BTREE,
                           INDEX `idx_roles_deleted_at`(`deleted_at`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 2 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = Dynamic;
-
--- ----------------------------
--- Records of roles
--- ----------------------------
-INSERT INTO `roles` VALUES (1, '2021-01-23 00:22:09.266', '2021-01-23 00:22:09.266', NULL, 'admin');
-INSERT INTO `roles` VALUES (2, '2021-01-23 00:22:09.266', '2021-01-23 00:22:09.266', NULL, 'user');
+) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Table structure for user_role
@@ -34,12 +28,6 @@ CREATE TABLE `user_role`  (
                               CONSTRAINT `fk_user_role_role` FOREIGN KEY (`role_id`) REFERENCES `roles` (`id`) ON DELETE RESTRICT ON UPDATE RESTRICT,
                               CONSTRAINT `fk_user_role_user` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE RESTRICT ON UPDATE RESTRICT
 ) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci ROW_FORMAT = Dynamic;
-
--- ----------------------------
--- Records of user_role
--- ----------------------------
-INSERT INTO `user_role` VALUES (1, 1);
-INSERT INTO `user_role` VALUES (1, 2);
 
 -- ----------------------------
 -- Table structure for users
@@ -60,6 +48,6 @@ CREATE TABLE `users`  (
 -- ----------------------------
 -- Records of users
 -- ----------------------------
-INSERT INTO `users` VALUES (1, '2021-01-23 00:22:09.264', '2021-01-23 00:22:09.264', NULL, 'admin', '$2a$12$XLiKy7M77cY56.1aE9IxDeKONAHbz1Z0pE7IOmzRfpjTHKiMZYsjG', '');
+-- INSERT INTO `users` VALUES (1, '2021-01-23 00:22:09.264', '2021-01-23 00:22:09.264', NULL, 'admin', '$2a$12$XLiKy7M77cY56.1aE9IxDeKONAHbz1Z0pE7IOmzRfpjTHKiMZYsjG', '');
 
 SET FOREIGN_KEY_CHECKS = 1;

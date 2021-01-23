@@ -8,17 +8,17 @@ import (
 	"goframe_learn/app/dao/internal"
 )
 
-// rolesDao is the manager for logic model data accessing
+// userDao is the manager for logic model data accessing
 // and custom defined data operations functions management. You can define
 // methods on it to extend its functionality as you wish.
-type rolesDao struct {
-	*internal.RolesDao
+type userDao struct {
+	*internal.UserDao
 }
 
 var (
-	// Roles is globally public accessible object for table roles operations.
-	Roles = &rolesDao{
-		internal.Roles,
+	// User is globally public accessible object for table user operations.
+	User = &userDao{
+		internal.User,
 	}
 )
 

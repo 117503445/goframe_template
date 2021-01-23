@@ -66,9 +66,9 @@ func InitDatabase() {
 			g.Log().Line().Panic(err)
 		}
 
-		g.DB().Table("roles").Data(g.List{{"name": "admin"}, {"name": "user"}}).Save()
+		g.DB().Table("role").Data(g.List{{"name": "admin"}, {"name": "user"}}).Save()
 
-		g.DB().Table("users").Data(g.List{{"username": "admin", "password": "$2a$12$XLiKy7M77cY56.1aE9IxDeKONAHbz1Z0pE7IOmzRfpjTHKiMZYsjG"}}).Save()
+		g.DB().Table("user").Data(g.List{{"username": "admin", "password": "$2a$12$XLiKy7M77cY56.1aE9IxDeKONAHbz1Z0pE7IOmzRfpjTHKiMZYsjG"}}).Save()
 
 		g.DB().Table("user_role").Data(g.List{{"user_id": "1", "role_id": "1"}, {"user_id": "1", "role_id": "2"}}).Save()
 

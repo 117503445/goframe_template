@@ -2,7 +2,7 @@ package response
 
 var Message = map[int]string{
 	Success:                 "success",
-	Fail:                    "fail",
+	Fail:                    "bad request",
 	Error:                   "error",
 	Unauthorized:            "unauthorized",
 	Forbidden:               "forbidden",

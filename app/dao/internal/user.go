@@ -15,36 +15,40 @@ import (
 	"goframe_learn/app/model"
 )
 
-// RolesDao is the manager for logic model data accessing
+// UserDao is the manager for logic model data accessing
 // and custom defined data operations functions management.
-type RolesDao struct {
+type UserDao struct {
 	gmvc.M
 	DB      gdb.DB
 	Table   string
-	Columns rolesColumns
+	Columns userColumns
 }
 
-// RolesColumns defines and stores column names for table roles.
-type rolesColumns struct {
+// UserColumns defines and stores column names for table user.
+type userColumns struct {
 	Id         string //   
     CreatedAt  string //   
     UpdatedAt  string //   
     DeletedAt  string //   
-    Name       string //
+    Username   string //   
+    Password   string //   
+    Avatar     string //
 }
 
 var (
-	// Roles is globally public accessible object for table roles operations.
-	Roles = &RolesDao{
-		M:     g.DB("default").Model("roles").Safe(),
+	// User is globally public accessible object for table user operations.
+	User = &UserDao{
+		M:     g.DB("default").Model("user").Safe(),
 		DB:    g.DB("default"),
-		Table: "roles",
-		Columns: rolesColumns{
+		Table: "user",
+		Columns: userColumns{
 			Id:        "id",          
             CreatedAt: "created_at",  
             UpdatedAt: "updated_at",  
             DeletedAt: "deleted_at",  
-            Name:      "name",
+            Username:  "username",    
+            Password:  "password",    
+            Avatar:    "avatar",
 		},
 	}
 )
@@ -53,34 +57,34 @@ var (
 // of current DB object and with given context in it.
 // Note that this returned DB object can be used only once, so do not assign it to
 // a global or package variable for long using.
-func (d *RolesDao) Ctx(ctx context.Context) *RolesDao {
-	return &RolesDao{M: d.M.Ctx(ctx)}
+func (d *UserDao) Ctx(ctx context.Context) *UserDao {
+	return &UserDao{M: d.M.Ctx(ctx)}
 }
 
 // As sets an alias name for current table.
-func (d *RolesDao) As(as string) *RolesDao {
-	return &RolesDao{M: d.M.As(as)}
+func (d *UserDao) As(as string) *UserDao {
+	return &UserDao{M: d.M.As(as)}
 }
 
 // TX sets the transaction for current operation.
-func (d *RolesDao) TX(tx *gdb.TX) *RolesDao {
-	return &RolesDao{M: d.M.TX(tx)}
+func (d *UserDao) TX(tx *gdb.TX) *UserDao {
+	return &UserDao{M: d.M.TX(tx)}
 }
 
 // Master marks the following operation on master node.
-func (d *RolesDao) Master() *RolesDao {
-	return &RolesDao{M: d.M.Master()}
+func (d *UserDao) Master() *UserDao {
+	return &UserDao{M: d.M.Master()}
 }
 
 // Slave marks the following operation on slave node.
 // Note that it makes sense only if there's any slave node configured.
-func (d *RolesDao) Slave() *RolesDao {
-	return &RolesDao{M: d.M.Slave()}
+func (d *UserDao) Slave() *UserDao {
+	return &UserDao{M: d.M.Slave()}
 }
 
 // Args sets custom arguments for model operation.
-func (d *RolesDao) Args(args ...interface{}) *RolesDao {
-	return &RolesDao{M: d.M.Args(args ...)}
+func (d *UserDao) Args(args ...interface{}) *UserDao {
+	return &UserDao{M: d.M.Args(args ...)}
 }
 
 // LeftJoin does "LEFT JOIN ... ON ..." statement on the model.
@@ -88,8 +92,8 @@ func (d *RolesDao) Args(args ...interface{}) *RolesDao {
 // and also with its alias name, like:
 // Table("user").LeftJoin("user_detail", "user_detail.uid=user.uid")
 // Table("user", "u").LeftJoin("user_detail", "ud", "ud.uid=u.uid")
-func (d *RolesDao) LeftJoin(table ...string) *RolesDao {
-	return &RolesDao{M: d.M.LeftJoin(table...)}
+func (d *UserDao) LeftJoin(table ...string) *UserDao {
+	return &UserDao{M: d.M.LeftJoin(table...)}
 }
 
 // RightJoin does "RIGHT JOIN ... ON ..." statement on the model.
@@ -97,8 +101,8 @@ func (d *RolesDao) LeftJoin(table ...string) *RolesDao {
 // and also with its alias name, like:
 // Table("user").RightJoin("user_detail", "user_detail.uid=user.uid")
 // Table("user", "u").RightJoin("user_detail", "ud", "ud.uid=u.uid")
-func (d *RolesDao) RightJoin(table ...string) *RolesDao {
-	return &RolesDao{M: d.M.RightJoin(table...)}
+func (d *UserDao) RightJoin(table ...string) *UserDao {
+	return &UserDao{M: d.M.RightJoin(table...)}
 }
 
 // InnerJoin does "INNER JOIN ... ON ..." statement on the model.
@@ -106,36 +110,36 @@ func (d *RolesDao) RightJoin(table ...string) *RolesDao {
 // and also with its alias name, like:
 // Table("user").InnerJoin("user_detail", "user_detail.uid=user.uid")
 // Table("user", "u").InnerJoin("user_detail", "ud", "ud.uid=u.uid")
-func (d *RolesDao) InnerJoin(table ...string) *RolesDao {
-	return &RolesDao{M: d.M.InnerJoin(table...)}
+func (d *UserDao) InnerJoin(table ...string) *UserDao {
+	return &UserDao{M: d.M.InnerJoin(table...)}
 }
 
 // Fields sets the operation fields of the model, multiple fields joined using char ','.
 // The parameter <fieldNamesOrMapStruct> can be type of string/map/*map/struct/*struct.
-func (d *RolesDao) Fields(fieldNamesOrMapStruct ...interface{}) *RolesDao {
-	return &RolesDao{M: d.M.Fields(fieldNamesOrMapStruct...)}
+func (d *UserDao) Fields(fieldNamesOrMapStruct ...interface{}) *UserDao {
+	return &UserDao{M: d.M.Fields(fieldNamesOrMapStruct...)}
 }
 
 // FieldsEx sets the excluded operation fields of the model, multiple fields joined using char ','.
 // The parameter <fieldNamesOrMapStruct> can be type of string/map/*map/struct/*struct.
-func (d *RolesDao) FieldsEx(fieldNamesOrMapStruct ...interface{}) *RolesDao {
-	return &RolesDao{M: d.M.FieldsEx(fieldNamesOrMapStruct...)}
+func (d *UserDao) FieldsEx(fieldNamesOrMapStruct ...interface{}) *UserDao {
+	return &UserDao{M: d.M.FieldsEx(fieldNamesOrMapStruct...)}
 }
 
 // Option sets the extra operation option for the model.
-func (d *RolesDao) Option(option int) *RolesDao {
-	return &RolesDao{M: d.M.Option(option)}
+func (d *UserDao) Option(option int) *UserDao {
+	return &UserDao{M: d.M.Option(option)}
 }
 
 // OmitEmpty sets OPTION_OMITEMPTY option for the model, which automatically filers
 // the data and where attributes for empty values.
-func (d *RolesDao) OmitEmpty() *RolesDao {
-	return &RolesDao{M: d.M.OmitEmpty()}
+func (d *UserDao) OmitEmpty() *UserDao {
+	return &UserDao{M: d.M.OmitEmpty()}
 }
 
 // Filter marks filtering the fields which does not exist in the fields of the operated table.
-func (d *RolesDao) Filter() *RolesDao {
-	return &RolesDao{M: d.M.Filter()}
+func (d *UserDao) Filter() *UserDao {
+	return &UserDao{M: d.M.Filter()}
 }
 
 // Where sets the condition statement for the model. The parameter <where> can be type of
@@ -149,8 +153,8 @@ func (d *RolesDao) Filter() *RolesDao {
 // Where("status IN (?)", g.Slice{1,2,3})
 // Where("age IN(?,?)", 18, 50)
 // Where(User{ Id : 1, UserName : "john"})
-func (d *RolesDao) Where(where interface{}, args ...interface{}) *RolesDao {
-	return &RolesDao{M: d.M.Where(where, args...)}
+func (d *UserDao) Where(where interface{}, args ...interface{}) *UserDao {
+	return &UserDao{M: d.M.Where(where, args...)}
 }
 
 // WherePri does the same logic as M.Where except that if the parameter <where>
@@ -158,54 +162,54 @@ func (d *RolesDao) Where(where interface{}, args ...interface{}) *RolesDao {
 // key value. That is, if primary key is "id" and given <where> parameter as "123", the
 // WherePri function treats the condition as "id=123", but M.Where treats the condition
 // as string "123".
-func (d *RolesDao) WherePri(where interface{}, args ...interface{}) *RolesDao {
-	return &RolesDao{M: d.M.WherePri(where, args...)}
+func (d *UserDao) WherePri(where interface{}, args ...interface{}) *UserDao {
+	return &UserDao{M: d.M.WherePri(where, args...)}
 }
 
 // And adds "AND" condition to the where statement.
-func (d *RolesDao) And(where interface{}, args ...interface{}) *RolesDao {
-	return &RolesDao{M: d.M.And(where, args...)}
+func (d *UserDao) And(where interface{}, args ...interface{}) *UserDao {
+	return &UserDao{M: d.M.And(where, args...)}
 }
 
 // Or adds "OR" condition to the where statement.
-func (d *RolesDao) Or(where interface{}, args ...interface{}) *RolesDao {
-	return &RolesDao{M: d.M.Or(where, args...)}
+func (d *UserDao) Or(where interface{}, args ...interface{}) *UserDao {
+	return &UserDao{M: d.M.Or(where, args...)}
 }
 
 // Group sets the "GROUP BY" statement for the model.
-func (d *RolesDao) Group(groupBy string) *RolesDao {
-	return &RolesDao{M: d.M.Group(groupBy)}
+func (d *UserDao) Group(groupBy string) *UserDao {
+	return &UserDao{M: d.M.Group(groupBy)}
 }
 
 // Order sets the "ORDER BY" statement for the model.
-func (d *RolesDao) Order(orderBy ...string) *RolesDao {
-	return &RolesDao{M: d.M.Order(orderBy...)}
+func (d *UserDao) Order(orderBy ...string) *UserDao {
+	return &UserDao{M: d.M.Order(orderBy...)}
 }
 
 // Limit sets the "LIMIT" statement for the model.
 // The parameter <limit> can be either one or two number, if passed two number is passed,
 // it then sets "LIMIT limit[0],limit[1]" statement for the model, or else it sets "LIMIT limit[0]"
 // statement.
-func (d *RolesDao) Limit(limit ...int) *RolesDao {
-	return &RolesDao{M: d.M.Limit(limit...)}
+func (d *UserDao) Limit(limit ...int) *UserDao {
+	return &UserDao{M: d.M.Limit(limit...)}
 }
 
 // Offset sets the "OFFSET" statement for the model.
 // It only makes sense for some databases like SQLServer, PostgreSQL, etc.
-func (d *RolesDao) Offset(offset int) *RolesDao {
-	return &RolesDao{M: d.M.Offset(offset)}
+func (d *UserDao) Offset(offset int) *UserDao {
+	return &UserDao{M: d.M.Offset(offset)}
 }
 
 // Page sets the paging number for the model.
 // The parameter <page> is started from 1 for paging.
 // Note that, it differs that the Limit function start from 0 for "LIMIT" statement.
-func (d *RolesDao) Page(page, limit int) *RolesDao {
-	return &RolesDao{M: d.M.Page(page, limit)}
+func (d *UserDao) Page(page, limit int) *UserDao {
+	return &UserDao{M: d.M.Page(page, limit)}
 }
 
 // Batch sets the batch operation number for the model.
-func (d *RolesDao) Batch(batch int) *RolesDao {
-	return &RolesDao{M: d.M.Batch(batch)}
+func (d *UserDao) Batch(batch int) *UserDao {
+	return &UserDao{M: d.M.Batch(batch)}
 }
 
 // Cache sets the cache feature for the model. It caches the result of the sql, which means
@@ -220,8 +224,8 @@ func (d *RolesDao) Batch(batch int) *RolesDao {
 // control the cache like changing the <duration> or clearing the cache with specified <name>.
 //
 // Note that, the cache feature is disabled if the model is operating on a transaction.
-func (d *RolesDao) Cache(duration time.Duration, name ...string) *RolesDao {
-	return &RolesDao{M: d.M.Cache(duration, name...)}
+func (d *UserDao) Cache(duration time.Duration, name ...string) *UserDao {
+	return &UserDao{M: d.M.Cache(duration, name...)}
 }
 
 // Data sets the operation data for the model.
@@ -231,39 +235,39 @@ func (d *RolesDao) Cache(duration time.Duration, name ...string) *RolesDao {
 // Data("uid", 10000)
 // Data(g.Map{"uid": 10000, "name":"john"})
 // Data(g.Slice{g.Map{"uid": 10000, "name":"john"}, g.Map{"uid": 20000, "name":"smith"})
-func (d *RolesDao) Data(data ...interface{}) *RolesDao {
-	return &RolesDao{M: d.M.Data(data...)}
+func (d *UserDao) Data(data ...interface{}) *UserDao {
+	return &UserDao{M: d.M.Data(data...)}
 }
 
 // All does "SELECT FROM ..." statement for the model.
-// It retrieves the records from table and returns the result as []*model.Roles.
+// It retrieves the records from table and returns the result as []*model.User.
 // It returns nil if there's no record retrieved with the given conditions from table.
 //
 // The optional parameter <where> is the same as the parameter of M.Where function,
 // see M.Where.
-func (d *RolesDao) All(where ...interface{}) ([]*model.Roles, error) {
+func (d *UserDao) All(where ...interface{}) ([]*model.User, error) {
 	all, err := d.M.All(where...)
 	if err != nil {
 		return nil, err
 	}
-	var entities []*model.Roles
+	var entities []*model.User
 	if err = all.Structs(&entities); err != nil && err != sql.ErrNoRows {
 		return nil, err
 	}
 	return entities, nil
 }
 
-// One retrieves one record from table and returns the result as *model.Roles.
+// One retrieves one record from table and returns the result as *model.User.
 // It returns nil if there's no record retrieved with the given conditions from table.
 //
 // The optional parameter <where> is the same as the parameter of M.Where function,
 // see M.Where.
-func (d *RolesDao) One(where ...interface{}) (*model.Roles, error) {
+func (d *UserDao) One(where ...interface{}) (*model.User, error) {
 	one, err := d.M.One(where...)
 	if err != nil {
 		return nil, err
 	}
-	var entity *model.Roles
+	var entity *model.User
 	if err = one.Struct(&entity); err != nil && err != sql.ErrNoRows {
 		return nil, err
 	}
@@ -272,12 +276,12 @@ func (d *RolesDao) One(where ...interface{}) (*model.Roles, error) {
 
 // FindOne retrieves and returns a single Record by M.WherePri and M.One.
 // Also see M.WherePri and M.One.
-func (d *RolesDao) FindOne(where ...interface{}) (*model.Roles, error) {
+func (d *UserDao) FindOne(where ...interface{}) (*model.User, error) {
 	one, err := d.M.FindOne(where...)
 	if err != nil {
 		return nil, err
 	}
-	var entity *model.Roles
+	var entity *model.User
 	if err = one.Struct(&entity); err != nil && err != sql.ErrNoRows {
 		return nil, err
 	}
@@ -286,12 +290,12 @@ func (d *RolesDao) FindOne(where ...interface{}) (*model.Roles, error) {
 
 // FindAll retrieves and returns Result by by M.WherePri and M.All.
 // Also see M.WherePri and M.All.
-func (d *RolesDao) FindAll(where ...interface{}) ([]*model.Roles, error) {
+func (d *UserDao) FindAll(where ...interface{}) ([]*model.User, error) {
 	all, err := d.M.FindAll(where...)
 	if err != nil {
 		return nil, err
 	}
-	var entities []*model.Roles
+	var entities []*model.User
 	if err = all.Structs(&entities); err != nil && err != sql.ErrNoRows {
 		return nil, err
 	}
@@ -314,7 +318,7 @@ func (d *RolesDao) FindAll(where ...interface{}) ([]*model.Roles, error) {
 //
 // user := (*User)(nil)
 // err  := dao.User.Where("id", 1).Struct(&user)
-func (d *RolesDao) Struct(pointer interface{}, where ...interface{}) error {
+func (d *UserDao) Struct(pointer interface{}, where ...interface{}) error {
 	return d.M.Struct(pointer, where...)
 }
 
@@ -334,7 +338,7 @@ func (d *RolesDao) Struct(pointer interface{}, where ...interface{}) error {
 //
 // users := ([]*User)(nil)
 // err   := dao.User.Structs(&users)
-func (d *RolesDao) Structs(pointer interface{}, where ...interface{}) error {
+func (d *UserDao) Structs(pointer interface{}, where ...interface{}) error {
 	return d.M.Structs(pointer, where...)
 }
 
@@ -359,14 +363,14 @@ func (d *RolesDao) Structs(pointer interface{}, where ...interface{}) error {
 //
 // users := ([]*User)(nil)
 // err   := dao.User.Scan(&users)
-func (d *RolesDao) Scan(pointer interface{}, where ...interface{}) error {
+func (d *UserDao) Scan(pointer interface{}, where ...interface{}) error {
 	return d.M.Scan(pointer, where...)
 }
 
 // Chunk iterates the table with given size and callback function.
-func (d *RolesDao) Chunk(limit int, callback func(entities []*model.Roles, err error) bool) {
+func (d *UserDao) Chunk(limit int, callback func(entities []*model.User, err error) bool) {
 	d.M.Chunk(limit, func(result gdb.Result, err error) bool {
-		var entities []*model.Roles
+		var entities []*model.User
 		err = result.Structs(&entities)
 		if err == sql.ErrNoRows {
 			return false
@@ -376,16 +380,16 @@ func (d *RolesDao) Chunk(limit int, callback func(entities []*model.Roles, err e
 }
 
 // LockUpdate sets the lock for update for current operation.
-func (d *RolesDao) LockUpdate() *RolesDao {
-	return &RolesDao{M: d.M.LockUpdate()}
+func (d *UserDao) LockUpdate() *UserDao {
+	return &UserDao{M: d.M.LockUpdate()}
 }
 
 // LockShared sets the lock in share mode for current operation.
-func (d *RolesDao) LockShared() *RolesDao {
-	return &RolesDao{M: d.M.LockShared()}
+func (d *UserDao) LockShared() *UserDao {
+	return &UserDao{M: d.M.LockShared()}
 }
 
 // Unscoped enables/disables the soft deleting feature.
-func (d *RolesDao) Unscoped() *RolesDao {
-	return &RolesDao{M: d.M.Unscoped()}
+func (d *UserDao) Unscoped() *UserDao {
+	return &UserDao{M: d.M.Unscoped()}
 }

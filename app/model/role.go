@@ -8,7 +8,7 @@ import (
 	"goframe_learn/app/model/internal"
 )
 
-// Roles is the golang structure for table roles.
-type Roles internal.Roles
+// Role is the golang structure for table role.
+type Role internal.Role
 
 // Fill with you ideas below.

@@ -8,8 +8,8 @@ import (
     "github.com/gogf/gf/os/gtime"
 )
 
-// Roles is the golang structure for table roles.
-type Roles struct {
+// Role is the golang structure for table role.
+type Role struct {
     Id        uint64      `orm:"id,primary" json:"id"`        //   
     CreatedAt *gtime.Time `orm:"created_at" json:"createdAt"` //   
     UpdatedAt *gtime.Time `orm:"updated_at" json:"updatedAt"` //   

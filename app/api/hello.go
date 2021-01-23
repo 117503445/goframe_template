@@ -1,4 +1,4 @@
-package hello
+package api
 
 import (
 	"github.com/gogf/gf/net/ghttp"
@@ -6,7 +6,7 @@ import (
 )
 
 // @summary 返回 Hello
-// @tags    Hello
+// @tags    hello
 // @produce json
 // @router  / [GET]
 // @success 200 {object} response.JsonResponse

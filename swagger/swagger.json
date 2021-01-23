@@ -7,7 +7,7 @@
         "description": "`goframe_learn` 117503445 的 goframe 学习/模板项目 api",
         "title": "goframe_learn API",
         "contact": {},
-        "version": "1.0.4"
+        "version": "1.0.5"
     },
     "paths": {
         "/": {
@@ -16,9 +16,42 @@
                     "application/json"
                 ],
                 "tags": [
-                    "Hello"
+                    "hello"
                 ],
                 "summary": "返回 Hello",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/response.JsonResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/user/sign-up": {
+            "post": {
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "user"
+                ],
+                "summary": "用户注册",
+                "parameters": [
+                    {
+                        "description": "UserServiceSignUpReq",
+                        "name": "b",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/model.UserServiceSignUpReq"
+                        }
+                    }
+                ],
                 "responses": {
                     "200": {
                         "description": "OK",
@@ -31,6 +64,17 @@
         }
     },
     "definitions": {
+        "model.UserServiceSignUpReq": {
+            "type": "object",
+            "properties": {
+                "password": {
+                    "type": "string"
+                },
+                "username": {
+                    "type": "string"
+                }
+            }
+        },
         "response.JsonResponse": {
             "type": "object",
             "properties": {

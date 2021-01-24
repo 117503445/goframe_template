@@ -89,6 +89,8 @@ func InitDatabase() {
 }
 
 func init() {
+	LogBindEs()
+
 	s := g.Server()
 	s.Plugin(&swagger.Swagger{})
 	// gres.Dump()

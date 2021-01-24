@@ -4,6 +4,7 @@ import (
 	"github.com/gogf/gf/frame/g"
 	"github.com/gogf/gf/net/ghttp"
 	"github.com/gogf/gf/util/gconv"
+	"goframe_learn/app/dao"
 	"goframe_learn/app/model"
 	"goframe_learn/app/service"
 	"goframe_learn/library/response"
@@ -51,6 +52,14 @@ func (*userApi) GetInfo(r *ghttp.Request) {
 	if err := r.GetCtxVar("user").Struct(user); err != nil {
 		response.Json(r, response.Fail, "", err)
 	} else {
-		response.Json(r, response.Success, "", g.Map{"id": user.Id, "username": user.Username})
+		roles := dao.GetRolesByUser(user)
+
+		roleNames := g.Array{}
+		for _, r := range roles {
+			// g.Log().Line().Debug(r.Name)
+			roleNames = append(roleNames, r.Name)
+		}
+		// g.Log().Line().Debug(dao.HasRole(user,"admin"))
+		response.Json(r, response.Success, "", g.Map{"id": user.Id, "username": user.Username, "roles": roleNames})
 	}
 }

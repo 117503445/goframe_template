@@ -35,7 +35,35 @@
 					}
 				},
 				"url": {
-					"raw": "http://{{host}}/api/user/sign-up",
+					"raw": "http://{{host}}/api/user",
+					"protocol": "http",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"api",
+						"user"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "login",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"username\":\"user1\",\r\n    \"password\":\"pass1\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://{{host}}/api/user/login",
 					"protocol": "http",
 					"host": [
 						"{{host}}"
@@ -43,7 +71,36 @@
 					"path": [
 						"api",
 						"user",
-						"sign-up"
+						"login"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "userInfo",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE2MTIwNzc4NTgsIm9yaWdfaWF0IjoxNjExNDczMDU4LCJ1c2VyIjp7ImlkIjoyLCJjcmVhdGVkQXQiOiIyMDIxLTAxLTI0IDE1OjIxOjUzIiwidXBkYXRlZEF0IjoiMjAyMS0wMS0yNCAxNToyMTo1MyIsImRlbGV0ZWRBdCI6bnVsbCwidXNlcm5hbWUiOiJ1c2VyMSIsInBhc3N3b3JkIjoiJDJhJDEyJEFqbTJqaUcveDJDaW4wRnFvUmtTY3VMVDFyaDRBR2g4M1hzeFQvZmtDa0RuWFBFS2V1Tml1IiwiYXZhdGFyIjoiIn19.Ix_hwEmqJnDSZaUURdQ14eZ6ESXAxMwiFH3YU0WYg8w",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://{{host}}/api/user",
+					"protocol": "http",
+					"host": [
+						"{{host}}"
+					],
+					"path": [
+						"api",
+						"user"
 					]
 				}
 			},

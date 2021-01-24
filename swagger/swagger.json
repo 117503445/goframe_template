@@ -6,8 +6,15 @@
     "info": {
         "description": "`goframe_learn` 117503445 的 goframe 学习/模板项目 api",
         "title": "goframe_learn API",
-        "contact": {},
-        "version": "1.0.8"
+        "contact": {
+            "name": "117503445",
+            "url": "http://www.117503445.top",
+            "email": "t117503445@gmail.com"
+        },
+        "license": {
+            "name": "GNU GPL 3.0"
+        },
+        "version": "1.1.0"
     },
     "paths": {
         "/": {
@@ -29,7 +36,32 @@
                 }
             }
         },
-        "/api/user/sign-up": {
+        "/api/user": {
+            "get": {
+                "security": [
+                    {
+                        "JWT": []
+                    }
+                ],
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "user"
+                ],
+                "summary": "用户获取自己的信息",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/response.JsonResponse"
+                        }
+                    }
+                }
+            },
             "post": {
                 "consumes": [
                     "application/json"
@@ -61,9 +93,53 @@
                     }
                 }
             }
+        },
+        "/api/user/login": {
+            "post": {
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "user"
+                ],
+                "summary": "用户登录",
+                "parameters": [
+                    {
+                        "description": "UserApiLoginReq",
+                        "name": "b",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/model.UserApiLoginReq"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/response.JsonResponse"
+                        }
+                    }
+                }
+            }
         }
     },
     "definitions": {
+        "model.UserApiLoginReq": {
+            "type": "object",
+            "properties": {
+                "password": {
+                    "type": "string"
+                },
+                "username": {
+                    "type": "string"
+                }
+            }
+        },
         "model.UserServiceSignUpReq": {
             "type": "object",
             "properties": {
@@ -91,6 +167,13 @@
                     "type": "string"
                 }
             }
+        }
+    },
+    "securityDefinitions": {
+        "JWT": {
+            "type": "apiKey",
+            "name": "Authorization",
+            "in": "header"
         }
     }
 }

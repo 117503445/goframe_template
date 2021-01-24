@@ -3,24 +3,16 @@ package service
 import (
 	"errors"
 	"fmt"
+	"github.com/gogf/gf/frame/g"
 	"goframe_learn/app/dao"
 	"goframe_learn/app/model"
 )
-
 
 var User = new(userService)
 
 type userService struct{}
 
-// @summary 用户注册
-// @tags    user
-// @accept json
-// @produce json
-// @Param b body model.UserServiceSignUpReq true "UserServiceSignUpReq"
-// @router  /api/user/sign-up [POST]
-// @success 200 {object} response.JsonResponse
 func (s *userService) SignUp(r *model.UserServiceSignUpReq) error {
-
 	// 账号唯一性数据检查
 	if !s.CheckUsername(r.Username) {
 		return errors.New(fmt.Sprintf("账号 %s 已经存在", r.Username))
@@ -40,5 +32,20 @@ func (s *userService) CheckUsername(username string) bool {
 		return false
 	} else {
 		return i == 0
+	}
+}
+
+func (s *userService) GetUserByUsernamePassword(serviceReq *model.UserServiceLoginReq) *model.User {
+	user := &model.User{}
+
+	if err := dao.User.Where(g.Map{"username=": serviceReq.Username}).Struct(user); err != nil {
+		g.Log().Line().Error(err)
+		return nil
+	} else {
+		if model.CheckPassword(serviceReq.Password, user.Password) {
+			return user
+		} else {
+			return nil
+		}
 	}
 }

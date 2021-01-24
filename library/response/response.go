@@ -23,7 +23,7 @@ func Json(r *ghttp.Request, code int, message string, data interface{}) {
 	if message == "" {
 		message = GetMsg(code)
 	} else {
-		message = fmt.Sprintf("%v:%v", GetMsg(code), message)
+		message = fmt.Sprintf("%v: %v", GetMsg(code), message)
 	}
 
 	switch d := data.(type) {

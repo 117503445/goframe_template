@@ -26,6 +26,16 @@ type UserServiceSignUpReq struct {
 	Password string
 }
 
+type UserApiLoginReq struct {
+	Username string `v:"required|length:5,16#账号不能为空|账号长度应当在:min到:max之间"`
+	Password string `v:"required|length:5,16#请输入确认密码|密码长度应当在:min到:max之间"`
+}
+
+type UserServiceLoginReq struct {
+	Username string
+	Password string
+}
+
 const (
 	// PassWordCost 密码加密难度
 	PassWordCost = 12
@@ -46,4 +56,10 @@ func EncryptPassword(str string) (string, error) {
 	} else {
 		return string(bytes), nil
 	}
+}
+
+func CheckPassword(plain string, cipher string) bool {
+	// g.Log().Line().Debug(plain)
+	// g.Log().Line().Debug(cipher)
+	return bcrypt.CompareHashAndPassword([]byte(cipher), []byte(plain)) == nil
 }

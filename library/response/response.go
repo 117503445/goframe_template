@@ -26,6 +26,11 @@ func Json(r *ghttp.Request, code int, message string, data interface{}) {
 		message = fmt.Sprintf("%v:%v", GetMsg(code), message)
 	}
 
+	switch d := data.(type) {
+	case error:
+		data = d.Error()
+	}
+
 	if err := r.Response.WriteJson(JsonResponse{
 		Code:    code,
 		Message: message,

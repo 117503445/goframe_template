@@ -6,13 +6,28 @@
 	},
 	"item": [
 		{
+			"name": "hello",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://{{host}}",
+					"protocol": "http",
+					"host": [
+						"{{host}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
 			"name": "signup",
 			"request": {
 				"method": "POST",
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n    \"username\":\"admin\",\r\n    \"password\":\"pass1\"\r\n}",
+					"raw": "{\r\n    \"username\":\"user1\",\r\n    \"password\":\"pass1\"\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"

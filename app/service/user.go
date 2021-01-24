@@ -22,10 +22,10 @@ type userService struct{}
 func (s *userService) SignUp(r *model.UserServiceSignUpReq) error {
 
 	// 账号唯一性数据检查
-	if !s.CheckPassport(r.Username) {
+	if !s.CheckUsername(r.Username) {
 		return errors.New(fmt.Sprintf("账号 %s 已经存在", r.Username))
 	}
-	if err := r.DecryptPassword(); err != nil {
+	if err := r.EncryptPassword(); err != nil {
 		return err
 	}
 	if _, err := dao.User.Save(r); err != nil {
@@ -35,7 +35,7 @@ func (s *userService) SignUp(r *model.UserServiceSignUpReq) error {
 }
 
 // 检查账号是否符合规范(目前仅检查唯一性),存在返回false,否则true
-func (s *userService) CheckPassport(username string) bool {
+func (s *userService) CheckUsername(username string) bool {
 	if i, err := dao.User.FindCount("username", username); err != nil {
 		return false
 	} else {

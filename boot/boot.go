@@ -4,10 +4,14 @@ import (
 	"database/sql"
 	"fmt"
 	"github.com/gogf/gf/frame/g"
+	"github.com/gogf/gf/os/gfile"
 	"github.com/gogf/gf/os/gres"
 	"github.com/gogf/swagger"
+	"goframe_learn/app/model"
 	_ "goframe_learn/packed"
+	"math/rand"
 	"strings"
+	"time"
 )
 
 //InitDatabase Create database if not exists
@@ -66,13 +70,35 @@ func InitDatabase() {
 			g.Log().Line().Panic(err)
 		}
 
-		g.DB().Table("role").Data(g.List{{"name": "admin"}, {"name": "user"}}).Save()
+		adminPassword := RandStringRunes(12)
 
-		g.DB().Table("user").Data(g.List{{"username": "admin", "password": "$2a$12$XLiKy7M77cY56.1aE9IxDeKONAHbz1Z0pE7IOmzRfpjTHKiMZYsjG"}}).Save()
+		if cipher, err := model.EncryptPassword(adminPassword); err != nil {
+			g.Log().Line().Panic(err)
+		} else {
+			if err = gfile.PutContents("./tmp/password/admin.txt", adminPassword); err != nil {
+				g.Log().Line().Error(err)
+			}
 
-		g.DB().Table("user_role").Data(g.List{{"user_id": "1", "role_id": "1"}, {"user_id": "1", "role_id": "2"}}).Save()
+			_, _ = g.DB().Table("role").Data(g.List{{"name": "admin"}, {"name": "user"}}).Save()
+
+			_, _ = g.DB().Table("user").Data(g.List{{"username": "admin", "password": cipher}}).Save()
+
+			_, _ = g.DB().Table("user_role").Data(g.List{{"user_id": "1", "role_id": "1"}, {"user_id": "1", "role_id": "2"}}).Save()
+		}
 
 	}
+}
+
+// RandStringRunes 返回随机字符串
+func RandStringRunes(n int) string {
+	var letterRunes = []rune("1234567890abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ")
+
+	rand.Seed(time.Now().UnixNano())
+	b := make([]rune, n)
+	for i := range b {
+		b[i] = letterRunes[rand.Intn(len(letterRunes))]
+	}
+	return string(b)
 }
 
 func init() {

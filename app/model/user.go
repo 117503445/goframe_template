@@ -31,11 +31,19 @@ const (
 	PassWordCost = 12
 )
 
-func (user *UserServiceSignUpReq) DecryptPassword() error {
-	if bytes, err := bcrypt.GenerateFromPassword([]byte(user.Password), PassWordCost); err != nil {
+func (user *UserServiceSignUpReq) EncryptPassword() error {
+	if cipher, err := EncryptPassword(user.Password); err != nil {
 		return err
 	} else {
-		user.Password = string(bytes)
+		user.Password = cipher
 		return nil
+	}
+}
+
+func EncryptPassword(str string) (string, error) {
+	if bytes, err := bcrypt.GenerateFromPassword([]byte(str), PassWordCost); err != nil {
+		return "", err
+	} else {
+		return string(bytes), nil
 	}
 }

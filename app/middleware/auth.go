@@ -4,9 +4,11 @@ import (
 	jwt "github.com/gogf/gf-jwt"
 	"github.com/gogf/gf/frame/g"
 	"github.com/gogf/gf/net/ghttp"
+	"github.com/gogf/gf/os/gfile"
 	"github.com/gogf/gf/util/gconv"
 	"goframe_learn/app/model"
 	"goframe_learn/app/service"
+	"goframe_learn/library"
 	"goframe_learn/library/response"
 	"time"
 )
@@ -19,9 +21,22 @@ var (
 // Initialization function,
 // rewrite this function to customized your own JWT settings.
 func init() {
+
+	pathJWT := "./tmp/password/jwt.txt"
+	var key string
+	if gfile.Exists(pathJWT) {
+		key = gfile.GetContents(pathJWT)
+	} else {
+		g.Log().Line().Info("create jwt key")
+		key = library.RandStringRunes(12)
+		if err := gfile.PutContents(pathJWT, key); err != nil {
+			g.Log().Line().Error(err)
+		}
+	}
+
 	authMiddleware, err := jwt.New(&jwt.GfJWTMiddleware{
 		Realm:           "goframe_learn",
-		Key:             []byte("secret key"), // todo
+		Key:             []byte(key),
 		Timeout:         time.Hour * 24 * 7,
 		MaxRefresh:      time.Minute * 5,
 		IdentityKey:     "id",
@@ -60,7 +75,7 @@ func PayloadFunc(data interface{}) jwt.MapClaims {
 // IdentityHandler sets the identity for JWT.
 func IdentityHandler(r *ghttp.Request) interface{} {
 	claims := jwt.ExtractClaims(r)
-	r.SetCtxVar("user",claims["user"])
+	r.SetCtxVar("user", claims["user"])
 	return claims["user"]
 }
 

@@ -8,10 +8,9 @@ import (
 	"github.com/gogf/gf/os/gres"
 	"github.com/gogf/swagger"
 	"goframe_learn/app/model"
+	"goframe_learn/library"
 	_ "goframe_learn/packed"
-	"math/rand"
 	"strings"
-	"time"
 )
 
 //InitDatabase Create database if not exists
@@ -53,7 +52,7 @@ func InitDatabase() {
 	}
 	// g.Log().Debug(isDbExists)
 	if !isDbExists {
-		g.Log().Info(fmt.Sprintf("CREATE DATABASE %v", dbName))
+		g.Log().Line().Info(fmt.Sprintf("create database %v", dbName))
 
 		if _, err = sqlDB.Exec(fmt.Sprintf("CREATE DATABASE IF NOT EXISTS %v", dbName)); err != nil {
 			g.Log().Line().Panic(err)
@@ -70,7 +69,7 @@ func InitDatabase() {
 			g.Log().Line().Panic(err)
 		}
 
-		adminPassword := RandStringRunes(12)
+		adminPassword := library.RandStringRunes(12)
 
 		if cipher, err := model.EncryptPassword(adminPassword); err != nil {
 			g.Log().Line().Panic(err)
@@ -87,18 +86,6 @@ func InitDatabase() {
 		}
 
 	}
-}
-
-// RandStringRunes 返回随机字符串
-func RandStringRunes(n int) string {
-	var letterRunes = []rune("1234567890abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ")
-
-	rand.Seed(time.Now().UnixNano())
-	b := make([]rune, n)
-	for i := range b {
-		b[i] = letterRunes[rand.Intn(len(letterRunes))]
-	}
-	return string(b)
 }
 
 func init() {

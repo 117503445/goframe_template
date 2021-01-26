@@ -19,7 +19,7 @@ func (w *EsLogWriter) Write(p []byte) (n int, err error) {
 	body, _ := json.Marshal(g.Map{"body": string(p)}) // todo parse log
 
 	req := esapi.IndexRequest{
-		Index:   "log",
+		Index:   g.Cfg().GetString("elasticsearch.index"),
 		Body:    strings.NewReader(string(body)),
 		Refresh: "true",
 	}
@@ -33,10 +33,10 @@ func (w *EsLogWriter) Write(p []byte) (n int, err error) {
 }
 
 func LogBindEs() {
-	if g.Cfg().Get("elasticsearch.enabled").(bool) {
-		// g.Log().Line().Debug("LogBindEs")
+	if g.Cfg().GetBool("elasticsearch.enabled") {
+		g.Log().Line().Debug("LogBindEs")
 		g.Log().SetWriter(&EsLogWriter{logger: glog.DefaultLogger()})
-		// g.Log().Line().Debug("test log")
+		g.Log().Line().Debug("test log")
 	}
 
 }

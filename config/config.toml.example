@@ -1,28 +1,37 @@
 # HTTP Server
 [server]
-	Address     = ":8199"
-	ServerRoot  = "public"
-	ServerAgent = "gf-app"
-	LogPath     = "/tmp/log/gf-app/server"
+Address = ":80"
+ServerAgent = "gf-app"
+LogPath = "./tmp/log/gf-app/server"
 
 # Logger.
 [logger]
-    Path        = "/tmp/log/gf-app"
-    Level       = "all"
-    Stdout      = true
-
-# Template.
-[viewer]
-    Path        = "template"
-    DefaultFile = "index.html"
-    Delimiters  =  ["${", "}"]
+Path = "./tmp/log/gf-app"
+Level = "all"
+Stdout = true
 
 # Database.
 [database]
-    link  = "mysql:root:12345678@tcp(127.0.0.1:3306)/test"
-    debug = true
-    # Database logger.
-    [database.logger]
-        Path   = "/tmp/log/gf-app/sql"
-        Level  = "all"
-        Stdout = true
+link = "mysql:${user}:${pass}@tcp(localhost:3306)/goframe_learn"
+debug = true
+forceCreate = true
+
+# Database logger.
+[database.logger]
+Path = "./tmp/log/gf-app/sql"
+Level = "all"
+Stdout = false
+
+# GF-CLI工具配置
+[gfcli]
+
+# 自定义DAO生成配置(默认是读取database配置)
+[[gfcli.gen.dao]]
+link = "mysql:${user}:${pass}@tcp(localhost:3306)/goframe_learn"
+tables = "role,user,user_role"
+
+[elasticsearch]
+enabled = false
+username = "elastic"
+password = "changeme"
+index = "goframe_learn"

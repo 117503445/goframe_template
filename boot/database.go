@@ -13,7 +13,7 @@ import (
 
 //InitDatabase Create database if not exists
 func InitDatabase() {
-	link := g.Cfg().Get("database.link").(string)
+	link := g.Cfg().GetString("database.link")
 	// g.Log().Line().Debug(link)
 
 	linkWithoutDbName := strings.Join(strings.Split(strings.Split(link, "/")[0], ":")[:][1:], ":") + "/"
@@ -27,7 +27,7 @@ func InitDatabase() {
 	}
 	defer sqlDB.Close()
 
-	isForceCreate := g.Cfg().Get("database.forceCreate").(bool)
+	isForceCreate := g.Cfg().GetBool("database.forceCreate")
 	if isForceCreate {
 		query := fmt.Sprintf("DROP DATABASE IF EXISTS %v", dbName)
 		if _, err = sqlDB.Exec(query); err != nil {

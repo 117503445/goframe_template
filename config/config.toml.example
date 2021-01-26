@@ -14,7 +14,7 @@ Stdout = true
 [database]
 link = "mysql:${user}:${pass}@tcp(localhost:3306)/goframe_learn"
 debug = true
-forceCreate = true
+forceCreate = true # 强制创建,启用后强制删除旧数据库后再创建新的,常用于开发
 
 # Database logger.
 [database.logger]
@@ -31,7 +31,7 @@ link = "mysql:${user}:${pass}@tcp(localhost:3306)/goframe_learn"
 tables = "role,user,user_role"
 
 [elasticsearch]
-enabled = false
+enabled = false # 是否启用 log 发送至 elasticsearch
 username = "elastic"
 password = "changeme"
 index = "goframe_learn"

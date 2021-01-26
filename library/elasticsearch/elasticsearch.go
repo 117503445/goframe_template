@@ -11,7 +11,6 @@ func init() {
 	if g.Cfg().Get("elasticsearch.enabled").(bool) {
 		g.Log().Line().Info("elasticsearch init")
 		cfg := elasticsearch.Config{
-			// ...
 			Username: g.Cfg().Get("elasticsearch.username").(string),
 			Password: g.Cfg().Get("elasticsearch.password").(string),
 		}

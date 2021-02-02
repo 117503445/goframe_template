@@ -16,11 +16,8 @@ func init() {
 			group.Group("/user", func(group *ghttp.RouterGroup) {
 				group.POST("/login", middleware.Auth.LoginHandler)
 				group.POST("/", api.User.SignUp)
-
-				group.Group("/", func(group *ghttp.RouterGroup) {
-					group.Middleware(middleware.JWTLogin)
-					group.GET("/", api.User.GetInfo)
-				})
+				group.Middleware(middleware.JWTLogin)
+				group.GET("/", api.User.GetInfo)
 			})
 		})
 	})

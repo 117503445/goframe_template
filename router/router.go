@@ -7,14 +7,10 @@ import (
 	"goframe_learn/app/middleware"
 )
 
-func middlewareAuth(r *ghttp.Request) {
-	middleware.Auth.MiddlewareFunc()(r)
-	r.Middleware.Next()
-}
-
 func init() {
 	s := g.Server()
 	s.Group("/", func(group *ghttp.RouterGroup) {
+		group.Middleware(middleware.CORS)
 		group.ALL("/", api.Hello)
 		group.Group("/api", func(group *ghttp.RouterGroup) {
 			group.Group("/user", func(group *ghttp.RouterGroup) {
@@ -22,7 +18,7 @@ func init() {
 				group.POST("/", api.User.SignUp)
 
 				group.Group("/", func(group *ghttp.RouterGroup) {
-					group.Middleware(middlewareAuth)
+					group.Middleware(middleware.JWTLogin)
 					group.GET("/", api.User.GetInfo)
 				})
 			})

@@ -13,7 +13,7 @@ var Message = map[int]string{
 	ErrorDeleteFail:         "errorDeleteFail",
 	ErrorSelectFail:         "errorSelectFail",
 	ErrorAuthCheckTokenFail: "errorAuthCheckTokenFail",
-	ErrorLoadCasBinFail:     "errorLoadCasBinFail",
+	ErrorAuthRoleFail:       "errorAuthRoleFail",
 }
 
 // GetMsg 根据状态码转换消息体

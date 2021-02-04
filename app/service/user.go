@@ -39,7 +39,7 @@ func (s *userService) GetUserByUsernamePassword(serviceReq *model.UserServiceLog
 	user := &model.User{}
 
 	if err := dao.User.Where(g.Map{"username=": serviceReq.Username}).Struct(user); err != nil {
-		g.Log().Line().Error(err)
+		// g.Log().Line().Error(err)
 		return nil
 	} else {
 		if model.CheckPassword(serviceReq.Password, user.Password) {

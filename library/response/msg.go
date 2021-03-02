@@ -24,4 +24,3 @@ func GetMsg(code int) string {
 		return Message[Fail]
 	}
 }
-

@@ -5,16 +5,16 @@
 package internal
 
 import (
-    "github.com/gogf/gf/os/gtime"
+	"github.com/gogf/gf/os/gtime"
 )
 
 // User is the golang structure for table user.
 type User struct {
-    Id        uint64      `orm:"id,primary" json:"id"`        //   
-    CreatedAt *gtime.Time `orm:"created_at" json:"createdAt"` //   
-    UpdatedAt *gtime.Time `orm:"updated_at" json:"updatedAt"` //   
-    DeletedAt *gtime.Time `orm:"deleted_at" json:"deletedAt"` //   
-    Username  string      `orm:"username"   json:"username"`  //   
-    Password  string      `orm:"password"   json:"password"`  //   
-    Avatar    string      `orm:"avatar"     json:"avatar"`    //   
+	Id        uint64      `orm:"id,primary" json:"id"`        //
+	CreatedAt *gtime.Time `orm:"created_at" json:"createdAt"` //
+	UpdatedAt *gtime.Time `orm:"updated_at" json:"updatedAt"` //
+	DeletedAt *gtime.Time `orm:"deleted_at" json:"deletedAt"` //
+	Username  string      `orm:"username"   json:"username"`  //
+	Password  string      `orm:"password"   json:"password"`  //
+	Avatar    string      `orm:"avatar"     json:"avatar"`    //
 }

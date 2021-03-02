@@ -18,7 +18,7 @@ type roleDao struct {
 var (
 	// Role is globally public accessible object for table role operations.
 	Role = &roleDao{
-		internal.Role,
+		&internal.Role,
 	}
 )
 

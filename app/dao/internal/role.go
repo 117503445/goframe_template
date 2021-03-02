@@ -26,25 +26,25 @@ type RoleDao struct {
 
 // RoleColumns defines and stores column names for table role.
 type roleColumns struct {
-	Id         string //   
-    CreatedAt  string //   
-    UpdatedAt  string //   
-    DeletedAt  string //   
-    Name       string //
+	Id        string //
+	CreatedAt string //
+	UpdatedAt string //
+	DeletedAt string //
+	Name      string //
 }
 
 var (
 	// Role is globally public accessible object for table role operations.
-	Role = &RoleDao{
+	Role = RoleDao{
 		M:     g.DB("default").Model("role").Safe(),
 		DB:    g.DB("default"),
 		Table: "role",
 		Columns: roleColumns{
-			Id:        "id",          
-            CreatedAt: "created_at",  
-            UpdatedAt: "updated_at",  
-            DeletedAt: "deleted_at",  
-            Name:      "name",
+			Id:        "id",
+			CreatedAt: "created_at",
+			UpdatedAt: "updated_at",
+			DeletedAt: "deleted_at",
+			Name:      "name",
 		},
 	}
 )
@@ -80,7 +80,7 @@ func (d *RoleDao) Slave() *RoleDao {
 
 // Args sets custom arguments for model operation.
 func (d *RoleDao) Args(args ...interface{}) *RoleDao {
-	return &RoleDao{M: d.M.Args(args ...)}
+	return &RoleDao{M: d.M.Args(args...)}
 }
 
 // LeftJoin does "LEFT JOIN ... ON ..." statement on the model.

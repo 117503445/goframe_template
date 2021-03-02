@@ -5,14 +5,14 @@
 package internal
 
 import (
-    "github.com/gogf/gf/os/gtime"
+	"github.com/gogf/gf/os/gtime"
 )
 
 // Role is the golang structure for table role.
 type Role struct {
-    Id        uint64      `orm:"id,primary" json:"id"`        //   
-    CreatedAt *gtime.Time `orm:"created_at" json:"createdAt"` //   
-    UpdatedAt *gtime.Time `orm:"updated_at" json:"updatedAt"` //   
-    DeletedAt *gtime.Time `orm:"deleted_at" json:"deletedAt"` //   
-    Name      string      `orm:"name"       json:"name"`      //   
+	Id        uint64      `orm:"id,primary" json:"id"`        //
+	CreatedAt *gtime.Time `orm:"created_at" json:"createdAt"` //
+	UpdatedAt *gtime.Time `orm:"updated_at" json:"updatedAt"` //
+	DeletedAt *gtime.Time `orm:"deleted_at" json:"deletedAt"` //
+	Name      string      `orm:"name"       json:"name"`      //
 }

@@ -14,7 +14,7 @@
         "license": {
             "name": "GNU GPL 3.0"
         },
-        "version": "1.2.2"
+        "version": "1.2.3"
     },
     "paths": {
         "/": {

@@ -1,1 +1,0 @@
-gf run main.go --swagger

@@ -15,11 +15,6 @@ type JsonResponse struct {
 
 //Json 返回JSON数据并退出当前HTTP执行函数。
 func Json(r *ghttp.Request, code int, message string, data interface{}) {
-	//responseData := interface{}(nil)
-	//if len(data) > 0 {
-	//	responseData = data[0]
-	//}
-
 	if message == "" {
 		message = GetMsg(code)
 	} else {
@@ -36,7 +31,7 @@ func Json(r *ghttp.Request, code int, message string, data interface{}) {
 		Message: message,
 		Data:    data,
 	}); err != nil {
-		g.Log().Error(err)
+		g.Log().Line().Error(err)
 	}
 
 	r.Exit()

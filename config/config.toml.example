@@ -28,7 +28,7 @@ Stdout = false
 # 自定义DAO生成配置(默认是读取database配置)
 [[gfcli.gen.dao]]
 link = "mysql:${user}:${pass}@tcp(localhost:3306)/goframe_learn"
-tables = "role,user,user_role"
+tables = ""
 
 [elasticsearch]
 enabled = false # 是否启用 log 发送至 elasticsearch

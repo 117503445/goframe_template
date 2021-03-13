@@ -18,3 +18,4 @@ main
 .vscode
 config/config.toml
 tmp/
+script/docker_push/config.yaml

@@ -19,6 +19,15 @@ func init() {
 				group.Middleware(middleware.JWTLogin)
 				group.GET("/", api.User.GetInfo)
 			})
+
+			group.Group("/tasks", func(group *ghttp.RouterGroup) {
+				group.GET("/", api.Task.ReadAll)
+				group.GET("/{id}", api.Task.ReadOne)
+				group.Middleware(middleware.JWTLogin, middleware.NeedRole("admin"))
+				group.POST("/", api.Task.Create)
+				group.DELETE("/{id}", api.Task.Delete)
+				group.PUT("/{id}", api.Task.Update)
+			})
 		})
 	})
 }

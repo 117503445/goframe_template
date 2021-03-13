@@ -13,7 +13,7 @@ def run_shell_script(script: str):
 
 def text_to_lf():
     for path in Path('.').glob('**/*'):
-        print(path)
+        # print(path)
         if str(path)[0] != '.' and not path.is_dir():
             try:
                 with open(path, 'r', encoding='utf-8')as f:
@@ -28,6 +28,7 @@ def text_to_lf():
 
 def main():
     run_shell_script('''gf gen dao
+gf pack document/create.sql packed/sql.go -y
 gf swagger --pack -y
 gofmt -l -s -w ./''')
     text_to_lf()

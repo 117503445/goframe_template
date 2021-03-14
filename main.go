@@ -8,7 +8,7 @@ import (
 )
 
 // @title       goframe_learn API
-// @version     1.3.4
+// @version     1.3.5
 // @description `goframe_learn` 117503445 的 goframe 学习/模板项目 api
 // @schemes     http
 
@@ -23,5 +23,7 @@ import (
 // @name Authorization
 
 func main() {
-	g.Server().Run()
+	s := g.Server()
+	s.SetDumpRouterMap(g.Cfg().GetBool("server.DumpRouterMap"))
+	s.Run()
 }

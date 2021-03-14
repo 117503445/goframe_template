@@ -3,6 +3,7 @@
 Address = ":80"
 ServerAgent = "gf-app"
 LogPath = "./tmp/log/gf-app/server"
+DumpRouterMap = false
 
 # Logger.
 [logger]

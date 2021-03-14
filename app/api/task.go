@@ -18,7 +18,7 @@ type tasksApi struct{}
 // @Accept  json
 // @Produce  json
 // @Success 200 {array} model.TaskApiResponse
-// @Router /api/tasks [get]
+// @Router /api/task [get]
 func (*tasksApi) ReadAll(r *ghttp.Request) {
 	var tasks []model.Task
 	if err := dao.Task.Structs(&tasks); err != nil {
@@ -43,11 +43,9 @@ func (*tasksApi) ReadAll(r *ghttp.Request) {
 // @Param   id      path int true  "任务id" default(1)
 // @Success 200 {object} model.TaskApiResponse
 // @Failure 404 {string} string "{"message":"Task not found"}"
-// @Router /api/tasks/{id} [get]
+// @Router /api/task/{id} [get]
 func (*tasksApi) ReadOne(r *ghttp.Request) {
 	id := r.GetRouterVar("id").Uint64()
-	//g.Log().Line().Debug("GetOne")
-	//g.Log().Line().Debug(id)
 	var tasks model.Task
 	if err := dao.Task.Where("id = ", id).Struct(&tasks); err != nil {
 		response.Json(r, response.ErrorNotExist, "", nil)
@@ -65,7 +63,7 @@ func (*tasksApi) ReadOne(r *ghttp.Request) {
 // @Produce  json
 // @Param   tasks      body model.TaskApiRequest true  "任务"
 // @Success 200 {object} model.TaskApiResponse
-// @Router /api/tasks [POST]
+// @Router /api/task [POST]
 // @Security JWT
 func (*tasksApi) Create(r *ghttp.Request) {
 	var (
@@ -99,10 +97,18 @@ func (*tasksApi) Create(r *ghttp.Request) {
 // @Param   id      path int true  "任务id" default(1)
 // @Success 200 {string} string "{"message": "delete success"}"
 // @Failure 404 {string} string "{"message": "Task not found"}"
-// @Router /api/tasks/{id} [DELETE]
+// @Router /api/task/{id} [DELETE]
 // @Security JWT
 func (*tasksApi) Delete(r *ghttp.Request) {
 	id := r.GetRouterVar("id").Uint64()
+
+	if count, err := dao.Task.Where("id = ", id).Count(); err != nil {
+		response.Json(r, response.Fail, "", nil)
+
+	} else if count == 0 {
+		response.Json(r, response.ErrorNotExist, "", nil)
+	}
+
 	if _, err := dao.Task.Where("id", id).Delete(); err != nil {
 		response.Json(r, response.Error, "", nil)
 	}
@@ -117,7 +123,7 @@ func (*tasksApi) Delete(r *ghttp.Request) {
 // @Param   tasks      body model.TaskApiRequest true  "任务"
 // @Success 200 {object} model.TaskApiResponse
 // @Failure 404 {string} string "{"message": "Task not found"}"
-// @Router /api/tasks/{id} [PUT]
+// @Router /api/task/{id} [PUT]
 // @Security JWT
 func (*tasksApi) Update(r *ghttp.Request) {
 	id := r.GetRouterVar("id").Uint64()

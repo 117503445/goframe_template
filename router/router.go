@@ -20,7 +20,7 @@ func init() {
 				group.GET("/", api.User.GetInfo)
 			})
 
-			group.Group("/tasks", func(group *ghttp.RouterGroup) {
+			group.Group("/task", func(group *ghttp.RouterGroup) {
 				group.GET("/", api.Task.ReadAll)
 				group.GET("/{id}", api.Task.ReadOne)
 				group.Middleware(middleware.JWTLogin, middleware.NeedRole("admin"))

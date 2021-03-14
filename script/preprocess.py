@@ -28,7 +28,6 @@ def text_to_lf():
 
 def main():
     run_shell_script('''gf gen dao
-gf pack document/create.sql packed/sql.go -y
 gf swagger --pack -y
 gofmt -l -s -w ./''')
     text_to_lf()

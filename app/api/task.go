@@ -121,32 +121,22 @@ func (*tasksApi) Delete(r *ghttp.Request) {
 // @Security JWT
 func (*tasksApi) Update(r *ghttp.Request) {
 	id := r.GetRouterVar("id").Uint64()
-	g.Log().Line().Debug(id)
 
-	var task model.Task
+	bodyMap := gconv.Map(r.GetBodyString())
 
-	var (
-		apiReq *model.TaskApiRequest
-	)
-	if err := r.Parse(&apiReq); err != nil {
-		response.Json(r, response.Error, "", nil)
-	}
-	if err := gconv.Struct(apiReq, &task); err != nil {
-		response.Json(r, response.Error, "", nil)
+	if _, ok := bodyMap["id"]; ok {
+		response.Json(r, response.Fail, "shouldn't pass id in POST method", nil)
 	}
 
-	task.Id = id
-	if count, err := dao.Task.Data(task).Where("id", id).Count(); err != nil {
-		response.Json(r, response.Error, "", nil)
-	} else if count != 1 {
-		response.Json(r, response.ErrorNotExist, "", nil)
-	}
-
-	if _, err := dao.Task.Data(task).Where("id", id).Update(); err != nil {
-		response.Json(r, response.Error, "", nil)
+	if _, err := dao.Task.Data(bodyMap).Where("id", id).Update(); err != nil {
+		response.Json(r, response.ErrorUpdateFail, "", err)
 	} else {
+		var tasks model.Task
+		if err := dao.Task.Where("id = ", id).Struct(&tasks); err != nil {
+			response.Json(r, response.ErrorNotExist, "", nil)
+		}
 		var taskRsp model.TaskApiResponse
-		if err := gconv.Struct(task, &taskRsp); err != nil {
+		if err := gconv.Struct(tasks, &taskRsp); err != nil {
 			g.Log().Line().Error(err)
 		}
 		response.Json(r, response.Success, "", taskRsp)

@@ -15,6 +15,10 @@ Stdout = true
 link = "mysql:${user}:${pass}@tcp(localhost:3306)/goframe_learn"
 debug = true
 forceCreate = true # 强制创建,启用后强制删除旧数据库后再创建新的,常用于开发
+sqlOnCreate = [
+    "./document/create.sql",
+    "./document/dev-data.sql"
+] # 创建数据库时启用,按顺序执行指定路径的 SQL
 
 # Database logger.
 [database.logger]

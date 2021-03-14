@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"github.com/gogf/gf/frame/g"
 	"github.com/gogf/gf/os/gfile"
-	"github.com/gogf/gf/os/gres"
+	"goframe_learn/app/dao"
 	"goframe_learn/app/model"
 	"goframe_learn/library"
 	"strings"
@@ -56,32 +56,40 @@ func InitDatabase() {
 			g.Log().Line().Panic(err)
 		}
 
-		createSQL := string(gres.Get("create.sql./create.sql").Content())
 		// g.Log().Line().Debug(createSQL)
 		sqlMyDB, err := sql.Open("mysql", linkWithoutDbName+dbName+"?multiStatements=true")
 		if err != nil {
 			g.Log().Line().Panic(err)
 		}
 
-		if _, err = sqlMyDB.Exec(createSQL); err != nil {
-			g.Log().Line().Panic(err)
-		}
-
-		adminPassword := library.RandStringRunes(12)
-
-		if cipher, err := model.EncryptPassword(adminPassword); err != nil {
-			g.Log().Line().Panic(err)
-		} else {
-			if err = gfile.PutContents("./tmp/password/admin.txt", adminPassword); err != nil {
-				g.Log().Line().Error(err)
+		arraySqlPath := g.Cfg().GetArray("database.sqlOnCreate")
+		for _, path := range arraySqlPath {
+			g.Log().Line().Debug("run ", path)
+			sqlText := gfile.GetContents(path.(string))
+			if _, err = sqlMyDB.Exec(sqlText); err != nil {
+				g.Log().Line().Panic(err)
 			}
-
-			_, _ = g.DB().Table("role").Data(g.List{{"name": "admin"}, {"name": "user"}}).Save()
-
-			_, _ = g.DB().Table("user").Data(g.List{{"username": "admin", "password": cipher}}).Save()
-
-			_, _ = g.DB().Table("user_role").Data(g.List{{"user_id": "1", "role_id": "1"}, {"user_id": "1", "role_id": "2"}}).Save()
 		}
 
+		randomAdminPasswordOnCreate := g.Cfg().GetBool("database.randomAdminPasswordOnCreate")
+		if randomAdminPasswordOnCreate {
+			adminPassword := library.RandStringRunes(12)
+			if cipher, err := model.EncryptPassword(adminPassword); err != nil {
+				g.Log().Line().Panic(err)
+			} else {
+				if err = gfile.PutContents("./tmp/password/admin.txt", adminPassword); err != nil {
+					g.Log().Line().Error(err)
+				}
+
+				if user, err := dao.User.Where("username", "admin").FindOne(); err != nil {
+					g.Log().Line().Error(err)
+				} else {
+					user.Password = cipher
+					if _, err = dao.User.Where("id", user.Id).Update(user); err != nil {
+						g.Log().Line().Error(err)
+					}
+				}
+			}
+		}
 	}
 }

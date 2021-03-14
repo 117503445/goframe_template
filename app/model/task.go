@@ -12,13 +12,13 @@ import (
 type Task internal.Task
 
 // Fill with you ideas below.
-type TaskApiRep struct {
+type TaskApiResponse struct {
 	Id    uint64 `orm:"id,primary" json:"id"`    //
 	Title string `orm:"title"      json:"Title"` //
 	Done  bool   `orm:"done"       json:"Done"`  //
 }
 
-type TaskApiReq struct {
+type TaskApiRequest struct {
 	Title string `orm:"title"      json:"Title"` //
 	Done  bool   `orm:"done"       json:"Done"`  //
 }

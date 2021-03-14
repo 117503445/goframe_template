@@ -17,10 +17,9 @@ type tasksApi struct{}
 // @Tags 任务
 // @Accept  json
 // @Produce  json
-// @Success 200 {array} model.TaskApiRep
+// @Success 200 {array} model.TaskApiResponse
 // @Router /api/tasks [get]
 func (*tasksApi) ReadAll(r *ghttp.Request) {
-	g.Log().Debug("GetAll")
 	var tasks []model.Task
 	if err := dao.Task.Structs(&tasks); err != nil {
 		response.Json(r, response.Error, "", nil)
@@ -29,7 +28,7 @@ func (*tasksApi) ReadAll(r *ghttp.Request) {
 		r.Response.Write("[]")
 		r.Exit()
 	} else {
-		var tasksRsp []model.TaskApiRep
+		var tasksRsp []model.TaskApiResponse
 		if err := gconv.Structs(tasks, &tasksRsp); err != nil {
 			g.Log().Line().Error(err)
 		}
@@ -42,18 +41,18 @@ func (*tasksApi) ReadAll(r *ghttp.Request) {
 // @Accept  json
 // @Produce  json
 // @Param   id      path int true  "任务id" default(1)
-// @Success 200 {object} model.TaskApiRep
+// @Success 200 {object} model.TaskApiResponse
 // @Failure 404 {string} string "{"message":"Task not found"}"
 // @Router /api/tasks/{id} [get]
 func (*tasksApi) ReadOne(r *ghttp.Request) {
-	id := r.GetInt("id")
+	id := r.GetRouterVar("id").Uint64()
 	//g.Log().Line().Debug("GetOne")
 	//g.Log().Line().Debug(id)
 	var tasks model.Task
 	if err := dao.Task.Where("id = ", id).Struct(&tasks); err != nil {
 		response.Json(r, response.ErrorNotExist, "", nil)
 	}
-	var taskRsp model.TaskApiRep
+	var taskRsp model.TaskApiResponse
 	if err := gconv.Struct(tasks, &taskRsp); err != nil {
 		g.Log().Line().Error(err)
 	}
@@ -64,13 +63,13 @@ func (*tasksApi) ReadOne(r *ghttp.Request) {
 // @Tags 任务
 // @Accept  json
 // @Produce  json
-// @Param   tasks      body model.TaskApiReq true  "任务"
-// @Success 200 {object} model.TaskApiRep
+// @Param   tasks      body model.TaskApiRequest true  "任务"
+// @Success 200 {object} model.TaskApiResponse
 // @Router /api/tasks [POST]
 // @Security JWT
 func (*tasksApi) Create(r *ghttp.Request) {
 	var (
-		apiReq *model.TaskApiReq
+		apiReq *model.TaskApiRequest
 		task   *model.Task
 	)
 	if err := r.Parse(&apiReq); err != nil {
@@ -85,7 +84,7 @@ func (*tasksApi) Create(r *ghttp.Request) {
 		id, _ := result.LastInsertId()
 		task.Id = gconv.Uint64(id)
 
-		var taskRsp model.TaskApiRep
+		var taskRsp model.TaskApiResponse
 		if err := gconv.Struct(task, &taskRsp); err != nil {
 			g.Log().Line().Error(err)
 		}
@@ -103,7 +102,7 @@ func (*tasksApi) Create(r *ghttp.Request) {
 // @Router /api/tasks/{id} [DELETE]
 // @Security JWT
 func (*tasksApi) Delete(r *ghttp.Request) {
-	id := r.GetInt("id")
+	id := r.GetRouterVar("id").Uint64()
 	if _, err := dao.Task.Where("id", id).Delete(); err != nil {
 		response.Json(r, response.Error, "", nil)
 	}
@@ -115,17 +114,19 @@ func (*tasksApi) Delete(r *ghttp.Request) {
 // @Accept  json
 // @Produce  json
 // @Param   id      path int true  "任务id" default(1)
-// @Param   tasks      body model.TaskApiReq true  "任务"
-// @Success 200 {object} model.TaskApiRep
+// @Param   tasks      body model.TaskApiRequest true  "任务"
+// @Success 200 {object} model.TaskApiResponse
 // @Failure 404 {string} string "{"message": "Task not found"}"
 // @Router /api/tasks/{id} [PUT]
 // @Security JWT
 func (*tasksApi) Update(r *ghttp.Request) {
-	id := r.GetUint64("id")
+	id := r.GetRouterVar("id").Uint64()
+	g.Log().Line().Debug(id)
+
 	var task model.Task
 
 	var (
-		apiReq *model.TaskApiReq
+		apiReq *model.TaskApiRequest
 	)
 	if err := r.Parse(&apiReq); err != nil {
 		response.Json(r, response.Error, "", nil)
@@ -135,7 +136,6 @@ func (*tasksApi) Update(r *ghttp.Request) {
 	}
 
 	task.Id = id
-
 	if count, err := dao.Task.Data(task).Where("id", id).Count(); err != nil {
 		response.Json(r, response.Error, "", nil)
 	} else if count != 1 {
@@ -145,7 +145,7 @@ func (*tasksApi) Update(r *ghttp.Request) {
 	if _, err := dao.Task.Data(task).Where("id", id).Update(); err != nil {
 		response.Json(r, response.Error, "", nil)
 	} else {
-		var taskRsp model.TaskApiRep
+		var taskRsp model.TaskApiResponse
 		if err := gconv.Struct(task, &taskRsp); err != nil {
 			g.Log().Line().Error(err)
 		}

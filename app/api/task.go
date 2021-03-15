@@ -25,7 +25,7 @@ func (*tasksApi) ReadAll(r *ghttp.Request) {
 		response.Json(r, response.Error, "", nil)
 	}
 	if len(tasks) == 0 {
-		r.Response.Write("[]")
+		r.Response.Write("[]") //todo
 		r.Exit()
 	} else {
 		var tasksRsp []model.TaskApiResponse
@@ -42,16 +42,15 @@ func (*tasksApi) ReadAll(r *ghttp.Request) {
 // @Produce  json
 // @Param   id      path int true  "任务id" default(1)
 // @Success 200 {object} model.TaskApiResponse
-// @Failure 404 {string} string "{"message":"Task not found"}"
 // @Router /api/task/{id} [get]
 func (*tasksApi) ReadOne(r *ghttp.Request) {
 	id := r.GetRouterVar("id").Uint64()
-	var tasks model.Task
-	if err := dao.Task.Where("id = ", id).Struct(&tasks); err != nil {
+	var task model.Task
+	if err := dao.Task.Where("id = ", id).Struct(&task); err != nil {
 		response.Json(r, response.ErrorNotExist, "", nil)
 	}
 	var taskRsp model.TaskApiResponse
-	if err := gconv.Struct(tasks, &taskRsp); err != nil {
+	if err := gconv.Struct(task, &taskRsp); err != nil {
 		g.Log().Line().Error(err)
 	}
 	response.Json(r, response.Success, "", taskRsp)
@@ -96,7 +95,6 @@ func (*tasksApi) Create(r *ghttp.Request) {
 // @Produce  json
 // @Param   id      path int true  "任务id" default(1)
 // @Success 200 {string} string "{"message": "delete success"}"
-// @Failure 404 {string} string "{"message": "Task not found"}"
 // @Router /api/task/{id} [DELETE]
 // @Security JWT
 func (*tasksApi) Delete(r *ghttp.Request) {
@@ -104,7 +102,6 @@ func (*tasksApi) Delete(r *ghttp.Request) {
 
 	if count, err := dao.Task.Where("id = ", id).Count(); err != nil {
 		response.Json(r, response.Fail, "", nil)
-
 	} else if count == 0 {
 		response.Json(r, response.ErrorNotExist, "", nil)
 	}
@@ -122,7 +119,6 @@ func (*tasksApi) Delete(r *ghttp.Request) {
 // @Param   id      path int true  "任务id" default(1)
 // @Param   tasks      body model.TaskApiRequest true  "任务"
 // @Success 200 {object} model.TaskApiResponse
-// @Failure 404 {string} string "{"message": "Task not found"}"
 // @Router /api/task/{id} [PUT]
 // @Security JWT
 func (*tasksApi) Update(r *ghttp.Request) {

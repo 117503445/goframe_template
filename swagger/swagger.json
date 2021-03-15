@@ -14,7 +14,7 @@
         "license": {
             "name": "GNU GPL 3.0"
         },
-        "version": "1.3.6"
+        "version": "1.3.7"
     },
     "paths": {
         "/": {
@@ -125,12 +125,6 @@
                         "schema": {
                             "$ref": "#/definitions/model.TaskApiResponse"
                         }
-                    },
-                    "404": {
-                        "description": "{\"message\":\"Task not found\"}",
-                        "schema": {
-                            "type": "string"
-                        }
                     }
                 }
             },
@@ -175,12 +169,6 @@
                         "schema": {
                             "$ref": "#/definitions/model.TaskApiResponse"
                         }
-                    },
-                    "404": {
-                        "description": "{\"message\": \"Task not found\"}",
-                        "schema": {
-                            "type": "string"
-                        }
                     }
                 }
             },
@@ -213,12 +201,6 @@
                 "responses": {
                     "200": {
                         "description": "{\"message\": \"delete success\"}",
-                        "schema": {
-                            "type": "string"
-                        }
-                    },
-                    "404": {
-                        "description": "{\"message\": \"Task not found\"}",
                         "schema": {
                             "type": "string"
                         }

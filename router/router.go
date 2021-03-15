@@ -27,6 +27,7 @@ func init() {
 				group.POST("/", api.Task.Create)
 				group.DELETE("/{id}", api.Task.Delete)
 				group.PUT("/{id}", api.Task.Update)
+				group.PATCH("/{id}", api.Task.Update)
 			})
 		})
 	})

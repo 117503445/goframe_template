@@ -29,6 +29,8 @@ func init() {
 				group.PUT("/{id}", api.Task.Update)
 				group.PATCH("/{id}", api.Task.Update)
 			})
+
+			// crud_gen will insert here
 		})
 	})
 }

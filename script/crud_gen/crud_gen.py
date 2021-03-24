@@ -72,9 +72,27 @@ def gen_dto():
 
         file.write_all_text(path_project/'app'/'model'/ p.name,text)
 
+def gen_router():
+    template = file.read_all_text(path_project/'script'/'crud_gen'/'template'/'route.txt')
+    dir_cfg = path_project/'script'/'crud_gen'/'cfg'
+
+    route = file.read_all_text(path_project/'router'/'router.go')
+    for file_cfg in dir_cfg.glob('*.json'):
+        cfg = json.loads(file.read_all_text(file_cfg))
+
+        name = cfg['小写'] 
+
+        if name in route:
+            print(f'{name} has already exists, skipped.')
+        else:
+            content = fill_template(template,cfg)
+            route = route.replace('// crud_gen will insert here',content)
+            print(f'{name} gen successful :)')
+    file.write_all_text(path_project/'router'/'router.go',route)
 def main():
-    # gen_api()
+    gen_api()
     gen_dto()
+    gen_router()
 
 
 if __name__ == '__main__':

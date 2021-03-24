@@ -1,0 +1,11 @@
+			group.Group("/${小写}", func(group *ghttp.RouterGroup) {
+				group.GET("/", api.${大写}.ReadAll)
+				group.GET("/{id}", api.${大写}.ReadOne)
+				group.Middleware(middleware.JWTLogin, middleware.NeedRole("admin"))
+				group.POST("/", api.${大写}.Create)
+				group.DELETE("/{id}", api.${大写}.Delete)
+				group.PUT("/{id}", api.${大写}.Update)
+				group.PATCH("/{id}", api.${大写}.Update)
+			})
+			
+			// crud_gen will insert here 

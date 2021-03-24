@@ -19,3 +19,4 @@ main
 config/config.toml
 tmp/
 script/docker_push/config.yaml
+script/template_make/out/api/

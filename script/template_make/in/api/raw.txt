@@ -1,0 +1,146 @@
+package api
+
+import (
+	"github.com/gogf/gf/frame/g"
+	"github.com/gogf/gf/net/ghttp"
+	"github.com/gogf/gf/util/gconv"
+	"goframe_learn/app/dao"
+	"goframe_learn/app/model"
+	"goframe_learn/library/response"
+)
+
+var Task = new(tasksApi)
+
+type tasksApi struct{}
+
+// @Summary 获取所有任务
+// @Tags 任务
+// @Accept  json
+// @Produce  json
+// @Success 200 {array} model.TaskApiResponse
+// @Router /api/task [get]
+func (*tasksApi) ReadAll(r *ghttp.Request) {
+	var tasks []model.Task
+	if err := dao.Task.Structs(&tasks); err != nil {
+		response.Json(r, response.Error, "", nil)
+	}
+	if len(tasks) == 0 {
+		r.Response.Write("[]") //todo
+		r.Exit()
+	} else {
+		var tasksRsp []model.TaskApiResponse
+		if err := gconv.Structs(tasks, &tasksRsp); err != nil {
+			g.Log().Line().Error(err)
+		}
+		response.Json(r, response.Success, "", tasksRsp)
+	}
+}
+
+// @Summary 获取一个任务
+// @Tags 任务
+// @Accept  json
+// @Produce  json
+// @Param   id      path int true  "任务id" default(1)
+// @Success 200 {object} model.TaskApiResponse
+// @Router /api/task/{id} [get]
+func (*tasksApi) ReadOne(r *ghttp.Request) {
+	id := r.GetRouterVar("id").Uint64()
+	var task model.Task
+	if err := dao.Task.Where("id = ", id).Struct(&task); err != nil {
+		response.Json(r, response.ErrorNotExist, "", nil)
+	}
+	var taskRsp model.TaskApiResponse
+	if err := gconv.Struct(task, &taskRsp); err != nil {
+		g.Log().Line().Error(err)
+	}
+	response.Json(r, response.Success, "", taskRsp)
+}
+
+// @Summary 添加一个任务
+// @Tags 任务
+// @Accept  json
+// @Produce  json
+// @Param   tasks      body model.TaskApiRequest true  "任务"
+// @Success 200 {object} model.TaskApiResponse
+// @Router /api/task [POST]
+// @Security JWT
+func (*tasksApi) Create(r *ghttp.Request) {
+	var (
+		apiReq *model.TaskApiRequest
+		task   *model.Task
+	)
+	if err := r.Parse(&apiReq); err != nil {
+		response.Json(r, response.ErrorCreateFail, "", nil)
+	}
+	if err := gconv.Struct(apiReq, &task); err != nil {
+		response.Json(r, response.ErrorCreateFail, "", nil)
+	}
+	if result, err := dao.Task.Insert(task); err != nil {
+		response.Json(r, response.ErrorCreateFail, "", nil)
+	} else {
+		id, _ := result.LastInsertId()
+		task.Id = gconv.Uint64(id)
+
+		var taskRsp model.TaskApiResponse
+		if err := gconv.Struct(task, &taskRsp); err != nil {
+			g.Log().Line().Error(err)
+		}
+		response.Json(r, response.Success, "", taskRsp)
+	}
+}
+
+// @Summary 删除一个任务
+// @Tags 任务
+// @Accept  json
+// @Produce  json
+// @Param   id      path int true  "任务id" default(1)
+// @Success 200 {string} string "{"message": "delete success"}"
+// @Router /api/task/{id} [DELETE]
+// @Security JWT
+func (*tasksApi) Delete(r *ghttp.Request) {
+	id := r.GetRouterVar("id").Uint64()
+
+	if count, err := dao.Task.Where("id = ", id).Count(); err != nil {
+		response.Json(r, response.Fail, "", nil)
+	} else if count == 0 {
+		response.Json(r, response.ErrorNotExist, "", nil)
+	}
+
+	if _, err := dao.Task.Where("id", id).Delete(); err != nil {
+		response.Json(r, response.Error, "", nil)
+	}
+	response.Json(r, response.Success, "", nil)
+}
+
+// @Summary 更改一个任务
+// @Tags 任务
+// @Accept  json
+// @Produce  json
+// @Param   id      path int true  "任务id" default(1)
+// @Param   tasks      body model.TaskApiRequest true  "任务"
+// @Success 200 {object} model.TaskApiResponse
+// @Router /api/task/{id} [PUT]
+// @Security JWT
+func (*tasksApi) Update(r *ghttp.Request) {
+	id := r.GetRouterVar("id").Uint64()
+
+	bodyMap := gconv.Map(r.GetBodyString())
+
+	if _, ok := bodyMap["id"]; ok {
+		response.Json(r, response.Fail, "shouldn't pass id in POST method", nil)
+	}
+
+	if _, err := dao.Task.Data(bodyMap).Where("id", id).Update(); err != nil {
+		response.Json(r, response.ErrorUpdateFail, "", err)
+	} else {
+		var tasks model.Task
+		if err := dao.Task.Where("id = ", id).Struct(&tasks); err != nil {
+			response.Json(r, response.ErrorNotExist, "", nil)
+		}
+		var taskRsp model.TaskApiResponse
+		if err := gconv.Struct(tasks, &taskRsp); err != nil {
+			g.Log().Line().Error(err)
+		}
+		response.Json(r, response.Success, "", taskRsp)
+	}
+}

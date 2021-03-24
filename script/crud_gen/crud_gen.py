@@ -1,3 +1,4 @@
+from os import EX_OSFILE
 from htutil import file
 from pathlib import Path
 
@@ -29,11 +30,51 @@ def gen_api():
             file.write_all_text(file_code,content)
             print(f'{file_code} gen successful :)')
 
+def gen_dto():
+    path_in = path_project / 'app' / 'model' / 'internal'
+    for p in path_in.glob('*.go'):
+        print(p)
+
+        s = file.read_all_text(p)
+        lines = s.split('\n')
+
+        structStart = -1
+        for i, line in enumerate(lines):
+            if ' struct {' in line:
+                structStart = i
+                break
+
+        lines = lines[structStart:]
+
+        lines = [line for line in lines if (not 'CreatedAt' in line and not 'UpdatedAt' in line and not 'DeletedAt' in line)]
+
+        response = '\n'.join(lines)
+        response = response.replace(' struct', 'ApiResponse struct')
+
+        lines = [line for line in lines if 'Id' not in line]
+
+        request = '\n'.join(lines)
+        request = request.replace(' struct', 'ApiRequest struct')
+
+
+        text = file.read_all_text(path_project/'app'/'model'/ p.name)
+        if 'ApiRequest' in text:
+            print('ApiRequest  has already exists, skipped.')
+        else:
+            text += request
+            print('ApiRequest gen successful :)')
+            
+        if 'ApiResponse' in text:
+            print('ApiResponse  has already exists, skipped.')
+        else:
+            text += response
+            print('ApiResponse gen successful :)')
+
+        file.write_all_text(path_project/'app'/'model'/ p.name,text)
 
 def main():
-    # print(path_project)
-    gen_api()
-    
+    # gen_api()
+    gen_dto()
 
 
 if __name__ == '__main__':

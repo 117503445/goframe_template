@@ -12,3 +12,9 @@ import (
 type UserRole internal.UserRole
 
 // Fill with you ideas below.
+type UserRoleApiRequest struct {
+}
+type UserRoleApiResponse struct {
+	UserId uint64 `orm:"user_id,primary" json:"userId"` //
+	RoleId uint64 `orm:"role_id,primary" json:"roleId"` //
+}

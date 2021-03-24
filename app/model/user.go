@@ -63,3 +63,14 @@ func CheckPassword(plain string, cipher string) bool {
 	// g.Log().Line().Debug(cipher)
 	return bcrypt.CompareHashAndPassword([]byte(cipher), []byte(plain)) == nil
 }
+type UserApiRequest struct {
+	Username  string      `orm:"username"   json:"username"`  //
+	Password  string      `orm:"password"   json:"password"`  //
+	Avatar    string      `orm:"avatar"     json:"avatar"`    //
+}
+type UserApiResponse struct {
+	Id        uint64      `orm:"id,primary" json:"id"`        //
+	Username  string      `orm:"username"   json:"username"`  //
+	Password  string      `orm:"password"   json:"password"`  //
+	Avatar    string      `orm:"avatar"     json:"avatar"`    //
+}

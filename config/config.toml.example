@@ -10,6 +10,7 @@ DumpRouterMap = false
 Path = "./tmp/log/gf-app"
 Level = "all"
 Stdout = true
+elasticsearch = true # 是否启用 log 发送至 elasticsearch
 
 # Database.
 [database]
@@ -36,7 +37,6 @@ link = "mysql:${user}:${pass}@tcp(localhost:3306)/goframe_learn"
 tables = ""
 
 [elasticsearch]
-enabled = false # 是否启用 log 发送至 elasticsearch
 username = "elastic"
 password = "changeme"
 index = "goframe_learn"

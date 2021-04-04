@@ -8,7 +8,7 @@ import (
 var Es *elasticsearch.Client
 
 func init() {
-	if g.Cfg().Get("elasticsearch.enabled").(bool) {
+	if len(g.Cfg().GetString("elasticsearch.index")) > 0 {
 		g.Log().Line().Info("elasticsearch init")
 		cfg := elasticsearch.Config{
 			Username: g.Cfg().GetString("elasticsearch.username"),

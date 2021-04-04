@@ -11,6 +11,7 @@ import (
 	"github.com/gogf/gf/text/gregex"
 	"goframe_learn/library"
 	"goframe_learn/library/elasticsearch"
+	"strings"
 )
 
 type EsLogWriter struct {
@@ -47,7 +48,7 @@ func makeEsLogBody(raw string) []byte {
 }
 func (w *EsLogWriter) Write(p []byte) (n int, err error) {
 
-	if !gregex.IsMatch(`\[[A-Z]{4}\]`, p) {
+	if !gregex.IsMatch(`\[[A-Z]{4}\]`, p) || strings.Contains(string(p), "[HTTP]") {
 		// 如果没有 [INFO] [DEBU]
 		// 不发送至 ES
 		return w.logger.Write(p)

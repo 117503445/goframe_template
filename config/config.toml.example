@@ -37,6 +37,7 @@ link = "mysql:${user}:${pass}@tcp(localhost:3306)/goframe_template"
 tables = ""
 
 [elasticsearch]
+enabled = true
 username = "elastic"
 password = "changeme"
 index = "goframe_template"

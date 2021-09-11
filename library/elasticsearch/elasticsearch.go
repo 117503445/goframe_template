@@ -8,9 +8,10 @@ import (
 var Es *elasticsearch.Client
 
 func init() {
-	if len(g.Cfg().GetString("elasticsearch.index")) > 0 {
+	if g.Cfg().GetBool("elasticsearch.enabled") {
 		g.Log().Line().Info("elasticsearch init")
 		cfg := elasticsearch.Config{
+			// todo Address
 			Username: g.Cfg().GetString("elasticsearch.username"),
 			Password: g.Cfg().GetString("elasticsearch.password"),
 		}

@@ -5,7 +5,7 @@
 package dao
 
 import (
-	"goframe_learn/app/dao/internal"
+	"goframe_template/app/dao/internal"
 )
 
 // taskDao is the manager for logic model data accessing

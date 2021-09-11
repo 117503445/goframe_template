@@ -1,16 +1,17 @@
 package middleware
 
 import (
+	"goframe_template/app/model"
+	"goframe_template/app/service"
+	"goframe_template/library"
+	"goframe_template/library/response"
+	"time"
+
 	jwt "github.com/gogf/gf-jwt"
 	"github.com/gogf/gf/frame/g"
 	"github.com/gogf/gf/net/ghttp"
 	"github.com/gogf/gf/os/gfile"
 	"github.com/gogf/gf/util/gconv"
-	"goframe_learn/app/model"
-	"goframe_learn/app/service"
-	"goframe_learn/library"
-	"goframe_learn/library/response"
-	"time"
 )
 
 var (
@@ -40,7 +41,7 @@ func init() {
 	}
 
 	authMiddleware, err := jwt.New(&jwt.GfJWTMiddleware{
-		Realm:           "goframe_learn",
+		Realm:           "goframe_template",
 		Key:             []byte(key),
 		Timeout:         time.Hour * 24 * 7,
 		MaxRefresh:      time.Minute * 5,

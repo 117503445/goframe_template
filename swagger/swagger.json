@@ -4,8 +4,8 @@
     ],
     "swagger": "2.0",
     "info": {
-        "description": "`goframe_learn` 117503445 的 goframe 学习/模板项目 api",
-        "title": "goframe_learn API",
+        "description": "`goframe_template` 117503445 的 goframe 学习/模板项目 api",
+        "title": "goframe_template API",
         "contact": {
             "name": "117503445",
             "url": "http://www.117503445.top",

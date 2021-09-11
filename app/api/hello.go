@@ -1,11 +1,12 @@
 package api
 
 import (
+	"goframe_template/library/response"
+	"time"
+
 	"github.com/gogf/gf/frame/g"
 	"github.com/gogf/gf/net/ghttp"
 	"github.com/gogf/gf/os/gtime"
-	"goframe_learn/library/response"
-	"time"
 )
 
 // @summary 返回 Hello

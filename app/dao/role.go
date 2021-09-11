@@ -5,7 +5,7 @@
 package dao
 
 import (
-	"goframe_learn/app/dao/internal"
+	"goframe_template/app/dao/internal"
 )
 
 // roleDao is the manager for logic model data accessing

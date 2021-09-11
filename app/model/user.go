@@ -5,7 +5,8 @@
 package model
 
 import (
-	"goframe_learn/app/model/internal"
+	"goframe_template/app/model/internal"
+
 	"golang.org/x/crypto/bcrypt"
 )
 

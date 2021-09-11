@@ -5,7 +5,7 @@
 package dao
 
 import (
-	"goframe_learn/app/dao/internal"
+	"goframe_template/app/dao/internal"
 )
 
 // userDao is the manager for logic model data accessing

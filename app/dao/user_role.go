@@ -5,10 +5,11 @@
 package dao
 
 import (
-	"github.com/gogf/gf/frame/g"
-	"goframe_learn/app/dao/internal"
-	"goframe_learn/app/model"
+	"goframe_template/app/dao/internal"
+	"goframe_template/app/model"
 	"reflect"
+
+	"github.com/gogf/gf/frame/g"
 )
 
 // userRoleDao is the manager for logic model data accessing

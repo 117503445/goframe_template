@@ -1,12 +1,13 @@
 package api
 
 import (
+	"goframe_template/app/dao"
+	"goframe_template/app/model"
+	"goframe_template/library/response"
+
 	"github.com/gogf/gf/frame/g"
 	"github.com/gogf/gf/net/ghttp"
 	"github.com/gogf/gf/util/gconv"
-	"goframe_learn/app/dao"
-	"goframe_learn/app/model"
-	"goframe_learn/library/response"
 )
 
 var Task = new(tasksApi)

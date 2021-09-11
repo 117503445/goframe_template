@@ -1,15 +1,15 @@
 package main
 
 import (
-	_ "goframe_learn/boot"
-	_ "goframe_learn/router"
+	_ "goframe_template/boot"
+	_ "goframe_template/router"
 
 	"github.com/gogf/gf/frame/g"
 )
 
-// @title       goframe_learn API
+// @title       goframe_template API
 // @version     1.3.9
-// @description `goframe_learn` 117503445 的 goframe 学习/模板项目 api
+// @description `goframe_template` 117503445 的 goframe 学习/模板项目 api
 // @schemes     http
 
 // @contact.name 117503445

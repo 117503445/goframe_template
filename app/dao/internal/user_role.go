@@ -12,7 +12,7 @@ import (
 	"github.com/gogf/gf/frame/gmvc"
 	"time"
 
-	"goframe_learn/app/model"
+	"goframe_template/app/model"
 )
 
 // UserRoleDao is the manager for logic model data accessing

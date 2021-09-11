@@ -1,10 +1,11 @@
 package middleware
 
 import (
+	"goframe_template/app/dao"
+	"goframe_template/app/model"
+	"goframe_template/library/response"
+
 	"github.com/gogf/gf/net/ghttp"
-	"goframe_learn/app/dao"
-	"goframe_learn/app/model"
-	"goframe_learn/library/response"
 )
 
 func NeedRole(role string) func(*ghttp.Request) {

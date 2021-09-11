@@ -5,13 +5,14 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
+	"goframe_template/library"
+	"goframe_template/library/elasticsearch"
+	"strings"
+
 	"github.com/elastic/go-elasticsearch/v8/esapi"
 	"github.com/gogf/gf/frame/g"
 	"github.com/gogf/gf/os/glog"
 	"github.com/gogf/gf/text/gregex"
-	"goframe_learn/library"
-	"goframe_learn/library/elasticsearch"
-	"strings"
 )
 
 type EsLogWriter struct {

@@ -3,12 +3,13 @@ package boot
 import (
 	"database/sql"
 	"fmt"
+	"goframe_template/app/dao"
+	"goframe_template/app/model"
+	"goframe_template/library"
+	"strings"
+
 	"github.com/gogf/gf/frame/g"
 	"github.com/gogf/gf/os/gfile"
-	"goframe_learn/app/dao"
-	"goframe_learn/app/model"
-	"goframe_learn/library"
-	"strings"
 )
 
 //InitDatabase Create database if not exists

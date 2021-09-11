@@ -5,7 +5,7 @@
 package model
 
 import (
-	"goframe_learn/app/model/internal"
+	"goframe_template/app/model/internal"
 )
 
 // UserRole is the golang structure for table user_role.

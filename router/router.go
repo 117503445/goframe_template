@@ -1,10 +1,11 @@
 package router
 
 import (
+	"goframe_template/app/api"
+	"goframe_template/app/middleware"
+
 	"github.com/gogf/gf/frame/g"
 	"github.com/gogf/gf/net/ghttp"
-	"goframe_learn/app/api"
-	"goframe_learn/app/middleware"
 )
 
 func init() {

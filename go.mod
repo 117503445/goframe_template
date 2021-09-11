@@ -1,4 +1,4 @@
-module goframe_learn
+module goframe_template
 
 require (
 	github.com/elastic/go-elasticsearch/v8 v8.0.0-20201229214741-2366c2514674

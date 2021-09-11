@@ -5,11 +5,12 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
+	"goframe_template/library/elasticsearch"
+	"io/ioutil"
+
 	"github.com/elastic/go-elasticsearch/v8/esapi"
 	"github.com/gogf/gf/frame/g"
 	"github.com/gogf/gf/net/ghttp"
-	"goframe_learn/library/elasticsearch"
-	"io/ioutil"
 )
 
 func HttpLog(r *ghttp.Request) {

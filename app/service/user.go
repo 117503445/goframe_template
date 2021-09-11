@@ -3,9 +3,10 @@ package service
 import (
 	"errors"
 	"fmt"
+	"goframe_template/app/dao"
+	"goframe_template/app/model"
+
 	"github.com/gogf/gf/frame/g"
-	"goframe_learn/app/dao"
-	"goframe_learn/app/model"
 )
 
 var User = new(userService)

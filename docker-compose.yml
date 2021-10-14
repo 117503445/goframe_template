@@ -1,0 +1,21 @@
+version: "3.9"
+services:
+  backend:
+    build:
+      context: .
+      dockerfile: Dockerfile_dev
+    restart: unless-stopped
+    ports:
+      - "8080:8080"
+    volumes:
+      - /etc/timezone:/etc/timezone
+      - /etc/localtime:/etc/localtime
+      - ./config/config.toml:/root/config/config.toml
+      - ./document/sql:/root/document
+      - ./tmp:/root/tmp
+  db:
+    image: mysql/mysql-server
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: "MYSQL_PASSWORD"
+      MYSQL_ROOT_HOST: "%"

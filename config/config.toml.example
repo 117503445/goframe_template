@@ -1,20 +1,20 @@
 # HTTP Server
 [server]
-Address = ":80"
-ServerAgent = "gf-app"
-LogPath = "./data/log/gf-app/server"
+Address = ":8080"
+ServerAgent = "goframe_template"
+LogPath = "./data/log/goframe_template/server"
 DumpRouterMap = false
 
 # Logger.
 [logger]
-Path = "./data/log/gf-app"
+Path = "./data/log/goframe_template"
 Level = "all"
 Stdout = true
-elasticsearch = true # 是否启用 log 发送至 elasticsearch
+elasticsearch = false # 是否启用 log 发送至 elasticsearch
 
 # Database.
 [database]
-link = "mysql:${user}:${pass}@tcp(localhost:3306)/goframe_template"
+link = "mysql:root:MYSQL_PASSWORD@tcp(db:3306)/goframe_template"
 debug = true
 forceCreate = true # 强制创建,启用后强制删除旧数据库后再创建新的,常用于开发
 sqlOnCreate = [
@@ -33,11 +33,11 @@ Stdout = false
 
 # 自定义DAO生成配置(默认是读取database配置)
 [[gfcli.gen.dao]]
-link = "mysql:${user}:${pass}@tcp(localhost:3306)/goframe_template"
+link = "mysql:root:MYSQL_PASSWORD@tcp(db:3306)/goframe_template"
 tables = ""
 
 [elasticsearch]
-enabled = true
+enabled = false
 username = "elastic"
 password = "changeme"
 index = "goframe_template"

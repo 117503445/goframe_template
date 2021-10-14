@@ -21,6 +21,7 @@ sqlOnCreate = [
     "./document/create.sql",
     "./document/dev-data.sql"
 ] # 创建数据库时启用,按顺序执行指定路径的 SQL
+randomAdminPasswordOnCreate = true
 
 # Database logger.
 [database.logger]

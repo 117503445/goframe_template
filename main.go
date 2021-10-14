@@ -8,7 +8,7 @@ import (
 )
 
 // @title       goframe_template API
-// @version     1.3.9
+// @version     1.4.0
 // @description `goframe_template` 117503445 的 goframe 学习/模板项目 api
 // @schemes     http
 

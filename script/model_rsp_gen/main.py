@@ -12,7 +12,7 @@ for p in path_in.glob('*.go'):
     #     MemberType  int    `orm:"member_type"  json:"memberType"`  //
     #     TeacherInfo string `orm:"teacher_info" json:"teacherInfo"` //
     # }'''
-    s = file.read_all_text(p)
+    s = file.read_text(p)
     lines = s.split('\n')
 
     structStart = -1

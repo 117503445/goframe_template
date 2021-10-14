@@ -11,11 +11,12 @@ import (
 	"github.com/gogf/gf/util/gconv"
 )
 
-// 用户API管理对象
+// User 用户API管理对象
 var User = new(userApi)
 
 type userApi struct{}
 
+// SignUp
 // @summary 用户注册
 // @tags    user
 // @accept json
@@ -41,6 +42,7 @@ func (*userApi) SignUp(r *ghttp.Request) {
 	}
 }
 
+// GetInfo
 // @summary 用户获取自己的信息
 // @tags    user
 // @accept json

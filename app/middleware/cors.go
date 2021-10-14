@@ -7,7 +7,7 @@ import (
 
 func CORS(r *ghttp.Request) {
 	corsOptions := r.Response.DefaultCORSOptions()
-	corsOptions.AllowDomain = []string{"localhost"}
+	corsOptions.AllowDomain = []string{"localhost"} // todo config
 	r.Response.CORS(corsOptions)
 	if !r.Response.CORSAllowedOrigin(corsOptions) {
 		r.Response.WriteStatus(http.StatusForbidden)

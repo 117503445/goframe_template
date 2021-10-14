@@ -15,7 +15,7 @@ import (
 )
 
 var (
-	// The underlying JWT middleware.
+	// Auth The underlying JWT middleware.
 	Auth *jwt.GfJWTMiddleware
 )
 

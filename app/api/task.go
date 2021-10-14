@@ -14,6 +14,7 @@ var Task = new(tasksApi)
 
 type tasksApi struct{}
 
+// ReadAll
 // @Summary 获取所有任务
 // @Tags 任务
 // @Accept  json
@@ -37,6 +38,7 @@ func (*tasksApi) ReadAll(r *ghttp.Request) {
 	}
 }
 
+// ReadOne
 // @Summary 获取一个任务
 // @Tags 任务
 // @Accept  json
@@ -57,6 +59,7 @@ func (*tasksApi) ReadOne(r *ghttp.Request) {
 	response.Json(r, response.Success, "", taskRsp)
 }
 
+// Create
 // @Summary 添加一个任务
 // @Tags 任务
 // @Accept  json
@@ -90,6 +93,7 @@ func (*tasksApi) Create(r *ghttp.Request) {
 	}
 }
 
+// Delete
 // @Summary 删除一个任务
 // @Tags 任务
 // @Accept  json
@@ -113,6 +117,7 @@ func (*tasksApi) Delete(r *ghttp.Request) {
 	response.Json(r, response.Success, "", nil)
 }
 
+// Update
 // @Summary 更改一个任务
 // @Tags 任务
 // @Accept  json

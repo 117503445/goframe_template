@@ -9,6 +9,7 @@ import (
 	"github.com/gogf/gf/os/gtime"
 )
 
+// Hello
 // @summary 返回 Hello
 // @tags    hello
 // @produce json

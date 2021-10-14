@@ -4,13 +4,11 @@ import (
 	"golang.org/x/crypto/bcrypt"
 )
 
-// 注册请求参数，用于前后端交互参数格式约定
 type UserApiSignUpReq struct {
 	Username string `v:"required|length:5,16#账号不能为空|账号长度应当在:min到:max之间"`
 	Password string `v:"required|length:5,16#请输入确认密码|密码长度应当在:min到:max之间"`
 }
 
-// 注册输入参数
 type UserServiceSignUpReq struct {
 	Username string
 	Password string
@@ -49,8 +47,6 @@ func EncryptPassword(str string) (string, error) {
 }
 
 func CheckPassword(plain string, cipher string) bool {
-	// g.Log().Line().Debug(plain)
-	// g.Log().Line().Debug(cipher)
 	return bcrypt.CompareHashAndPassword([]byte(cipher), []byte(plain)) == nil
 }
 

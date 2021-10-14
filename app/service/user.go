@@ -28,7 +28,7 @@ func (s *userService) SignUp(ctx context.Context, r *model.UserServiceSignUpReq)
 	return nil
 }
 
-// 检查账号是否符合规范(目前仅检查唯一性),存在返回false,否则true
+// CheckUsername 检查账号是否符合规范(目前仅检查唯一性),存在返回false,否则true
 func (s *userService) CheckUsername(ctx context.Context, username string) bool {
 	if i, err := dao.User.Ctx(ctx).FindCount("username", username); err != nil {
 		return false

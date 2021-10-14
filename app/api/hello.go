@@ -15,6 +15,5 @@ import (
 // @router  / [GET]
 // @success 200 {object} response.JsonResponse
 func Hello(r *ghttp.Request) {
-	g.Log().Line().Debug("Test123")
 	response.Json(r, 0, "hello", g.Map{"time": gtime.New(time.Now())})
 }

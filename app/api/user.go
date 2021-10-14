@@ -34,7 +34,7 @@ func (*userApi) SignUp(r *ghttp.Request) {
 	if err := gconv.Struct(apiReq, &serviceReq); err != nil {
 		response.Json(r, response.Fail, "", err)
 	}
-	if err := service.User.SignUp(serviceReq); err != nil {
+	if err := service.User.SignUp(r.Context(), serviceReq); err != nil {
 		response.Json(r, response.ErrorCreateFail, "", err)
 	} else {
 		response.Json(r, response.Success, "", nil)

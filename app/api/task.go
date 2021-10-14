@@ -22,7 +22,7 @@ type tasksApi struct{}
 // @Router /api/task [get]
 func (*tasksApi) ReadAll(r *ghttp.Request) {
 	var tasks []model.Task
-	if err := dao.Task.Structs(&tasks); err != nil {
+	if err := dao.Task.Ctx(r.Context()).Structs(&tasks); err != nil {
 		response.Json(r, response.Error, "", nil)
 	}
 	if len(tasks) == 0 {
@@ -47,7 +47,7 @@ func (*tasksApi) ReadAll(r *ghttp.Request) {
 func (*tasksApi) ReadOne(r *ghttp.Request) {
 	id := r.GetRouterVar("id").Uint64()
 	var task model.Task
-	if err := dao.Task.Where("id = ", id).Struct(&task); err != nil {
+	if err := dao.Task.Ctx(r.Context()).Where("id = ", id).Struct(&task); err != nil {
 		response.Json(r, response.ErrorNotExist, "", nil)
 	}
 	var taskRsp model.TaskApiResponse
@@ -76,7 +76,7 @@ func (*tasksApi) Create(r *ghttp.Request) {
 	if err := gconv.Struct(apiReq, &task); err != nil {
 		response.Json(r, response.ErrorCreateFail, "", nil)
 	}
-	if result, err := dao.Task.Insert(task); err != nil {
+	if result, err := dao.Task.Ctx(r.Context()).Insert(task); err != nil {
 		response.Json(r, response.ErrorCreateFail, "", nil)
 	} else {
 		id, _ := result.LastInsertId()
@@ -101,13 +101,13 @@ func (*tasksApi) Create(r *ghttp.Request) {
 func (*tasksApi) Delete(r *ghttp.Request) {
 	id := r.GetRouterVar("id").Uint64()
 
-	if count, err := dao.Task.Where("id = ", id).Count(); err != nil {
+	if count, err := dao.Task.Ctx(r.Context()).Where("id = ", id).Count(); err != nil {
 		response.Json(r, response.Fail, "", nil)
 	} else if count == 0 {
 		response.Json(r, response.ErrorNotExist, "", nil)
 	}
 
-	if _, err := dao.Task.Where("id", id).Delete(); err != nil {
+	if _, err := dao.Task.Ctx(r.Context()).Where("id", id).Delete(); err != nil {
 		response.Json(r, response.Error, "", nil)
 	}
 	response.Json(r, response.Success, "", nil)
@@ -131,11 +131,11 @@ func (*tasksApi) Update(r *ghttp.Request) {
 		response.Json(r, response.Fail, "shouldn't pass id in POST method", nil)
 	}
 
-	if _, err := dao.Task.Data(bodyMap).Where("id", id).Update(); err != nil {
+	if _, err := dao.Task.Ctx(r.Context()).Data(bodyMap).Where("id", id).Update(); err != nil {
 		response.Json(r, response.ErrorUpdateFail, "", err)
 	} else {
 		var tasks model.Task
-		if err := dao.Task.Where("id = ", id).Struct(&tasks); err != nil {
+		if err := dao.Task.Ctx(r.Context()).Where("id = ", id).Struct(&tasks); err != nil {
 			response.Json(r, response.ErrorNotExist, "", nil)
 		}
 		var taskRsp model.TaskApiResponse

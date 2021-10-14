@@ -133,7 +133,7 @@ func Authenticator(r *ghttp.Request) (interface{}, error) {
 		return "", err
 	}
 
-	if user := service.User.GetUserByUsernamePassword(serviceReq); user != nil {
+	if user := service.User.GetUserByUsernamePassword(r.Context(), serviceReq); user != nil {
 		return user, nil
 	}
 

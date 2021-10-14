@@ -1,6 +1,7 @@
 package boot
 
 import (
+	"context"
 	"database/sql"
 	"fmt"
 	"goframe_template/app/dao"
@@ -81,12 +82,13 @@ func InitDatabase() {
 				if err = gfile.PutContents("./tmp/password/admin.txt", adminPassword); err != nil {
 					g.Log().Line().Error(err)
 				}
+				var user *model.User
 
-				if user, err := dao.User.Where("username", "admin").FindOne(); err != nil {
+				if err := dao.User.Ctx(context.TODO()).Where("username", "admin").Scan(&user); err != nil {
 					g.Log().Line().Error(err)
 				} else {
 					user.Password = cipher
-					if _, err = dao.User.Where("id", user.Id).Update(user); err != nil {
+					if _, err = dao.User.Ctx(context.TODO()).Where("id", user.Id).Update(user); err != nil {
 						g.Log().Line().Error(err)
 					}
 				}

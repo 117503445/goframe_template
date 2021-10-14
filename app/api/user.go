@@ -1,7 +1,6 @@
 package api
 
 import (
-	"goframe_template/app/dao"
 	"goframe_template/app/model"
 	"goframe_template/app/service"
 	"goframe_template/library/response"
@@ -55,7 +54,7 @@ func (*userApi) GetInfo(r *ghttp.Request) {
 	if err := r.GetCtxVar("user").Struct(user); err != nil {
 		response.Json(r, response.Fail, "", err)
 	} else {
-		roles := dao.GetRolesByUser(user)
+		roles := service.UserRole.GetRolesByUser(user)
 
 		roleNames := g.Array{}
 		for _, r := range roles {

@@ -1,6 +1,7 @@
 package service
 
 import (
+	"context"
 	"github.com/gogf/gf/frame/g"
 	"goframe_template/app/model"
 	"reflect"
@@ -10,7 +11,7 @@ var UserRole = new(userRoleService)
 
 type userRoleService struct{}
 
-func (s *userRoleService) GetRolesByUser(user *model.User) []model.Role {
+func (s *userRoleService) GetRolesByUser(ctx context.Context, user *model.User) []model.Role {
 	// todo orm
 	var roles []model.Role
 	g.Log().Line().Debug(reflect.TypeOf(roles))
@@ -28,8 +29,8 @@ func (s *userRoleService) GetRolesByUser(user *model.User) []model.Role {
 	}
 }
 
-func (s *userRoleService) HasRole(user *model.User, roleName string) bool {
-	roles := s.GetRolesByUser(user)
+func (s *userRoleService) HasRole(ctx context.Context, user *model.User, roleName string) bool {
+	roles := s.GetRolesByUser(ctx, user)
 	for _, r := range roles {
 		if roleName == r.Name {
 			return true

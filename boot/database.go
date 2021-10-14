@@ -77,7 +77,7 @@ func InitDatabase() {
 		randomAdminPasswordOnCreate := g.Cfg().GetBool("database.randomAdminPasswordOnCreate")
 		if randomAdminPasswordOnCreate {
 			adminPassword := library.RandStringRunes(12)
-			if cipher, err := service.User.EncryptPassword(adminPassword); err != nil {
+			if cipher, err := service.User.EncryptPassword(context.TODO(), adminPassword); err != nil {
 				g.Log().Line().Panic(err)
 			} else {
 				if err = gfile.PutContents("./tmp/password/admin.txt", adminPassword); err != nil {

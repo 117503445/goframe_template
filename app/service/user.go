@@ -20,7 +20,7 @@ func (s *userService) SignUp(ctx context.Context, r *model.UserServiceSignUpReq)
 	if !s.CheckUsername(ctx, r.Username) {
 		return errors.New(fmt.Sprintf("账号 %s 已经存在", r.Username))
 	}
-	if cipher, err := s.EncryptPassword(r.Password); err != nil {
+	if cipher, err := s.EncryptPassword(ctx, r.Password); err != nil {
 		return err
 	} else {
 		r.Password = cipher
@@ -46,7 +46,7 @@ func (s *userService) GetUserByUsernamePassword(ctx context.Context, serviceReq 
 	if err := dao.User.Ctx(ctx).Where(g.Map{"username=": serviceReq.Username}).Scan(user); err != nil {
 		return nil
 	} else {
-		if s.CheckPassword(serviceReq.Password, user.Password) {
+		if s.CheckPassword(ctx, serviceReq.Password, user.Password) {
 			return user
 		} else {
 			return nil
@@ -54,7 +54,7 @@ func (s *userService) GetUserByUsernamePassword(ctx context.Context, serviceReq 
 	}
 }
 
-func (s *userService) EncryptPassword(str string) (string, error) {
+func (s *userService) EncryptPassword(ctx context.Context, str string) (string, error) {
 	const PassWordCost = 12 // PassWordCost 密码加密难度
 	if bytes, err := bcrypt.GenerateFromPassword([]byte(str), PassWordCost); err != nil {
 		return "", err
@@ -63,6 +63,6 @@ func (s *userService) EncryptPassword(str string) (string, error) {
 	}
 }
 
-func (s *userService) CheckPassword(plain string, cipher string) bool {
+func (s *userService) CheckPassword(ctx context.Context, plain string, cipher string) bool {
 	return bcrypt.CompareHashAndPassword([]byte(cipher), []byte(plain)) == nil
 }

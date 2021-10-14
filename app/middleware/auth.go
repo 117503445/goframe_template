@@ -14,7 +14,7 @@ func NeedRole(role string) func(*ghttp.Request) {
 		if err := r.GetCtxVar("user").Struct(user); err != nil {
 			response.Json(r, response.ErrorAuthCheckTokenFail, "", err)
 		} else {
-			if service.UserRole.HasRole(user, role) {
+			if service.UserRole.HasRole(r.Context(), user, role) {
 				r.Middleware.Next()
 			} else {
 				response.Json(r, response.ErrorAuthRoleFail, "", nil)

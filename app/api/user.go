@@ -54,7 +54,7 @@ func (*userApi) GetInfo(r *ghttp.Request) {
 	if err := r.GetCtxVar("user").Struct(user); err != nil {
 		response.Json(r, response.Fail, "", err)
 	} else {
-		roles := service.UserRole.GetRolesByUser(user)
+		roles := service.UserRole.GetRolesByUser(r.Context(), user)
 
 		roleNames := g.Array{}
 		for _, r := range roles {

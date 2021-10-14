@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"goframe_template/app/dao"
 	"goframe_template/app/model"
+	"goframe_template/app/service"
 	"goframe_template/library"
 	"strings"
 
@@ -76,7 +77,7 @@ func InitDatabase() {
 		randomAdminPasswordOnCreate := g.Cfg().GetBool("database.randomAdminPasswordOnCreate")
 		if randomAdminPasswordOnCreate {
 			adminPassword := library.RandStringRunes(12)
-			if cipher, err := model.EncryptPassword(adminPassword); err != nil {
+			if cipher, err := service.User.EncryptPassword(adminPassword); err != nil {
 				g.Log().Line().Panic(err)
 			} else {
 				if err = gfile.PutContents("./tmp/password/admin.txt", adminPassword); err != nil {

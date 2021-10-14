@@ -43,8 +43,7 @@ func (s *userService) CheckUsername(ctx context.Context, username string) bool {
 func (s *userService) GetUserByUsernamePassword(ctx context.Context, serviceReq *model.UserServiceLoginReq) *model.User {
 	user := &model.User{}
 
-	if err := dao.User.Ctx(ctx).Where(g.Map{"username=": serviceReq.Username}).Struct(user); err != nil {
-		// g.Log().Line().Error(err)
+	if err := dao.User.Ctx(ctx).Where(g.Map{"username=": serviceReq.Username}).Scan(user); err != nil {
 		return nil
 	} else {
 		if s.CheckPassword(serviceReq.Password, user.Password) {
@@ -54,10 +53,6 @@ func (s *userService) GetUserByUsernamePassword(ctx context.Context, serviceReq 
 		}
 	}
 }
-
-//func (s *userService) EncryptPassword() error {
-
-//}
 
 func (s *userService) EncryptPassword(str string) (string, error) {
 	const PassWordCost = 12 // PassWordCost 密码加密难度

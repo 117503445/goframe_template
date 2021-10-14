@@ -23,7 +23,7 @@ type tasksApi struct{}
 // @Router /api/task [get]
 func (*tasksApi) ReadAll(r *ghttp.Request) {
 	var tasks []model.Task
-	if err := dao.Task.Ctx(r.Context()).Structs(&tasks); err != nil {
+	if err := dao.Task.Ctx(r.Context()).Scan(&tasks); err != nil {
 		response.Json(r, response.Error, "", nil)
 	}
 	if len(tasks) == 0 {
@@ -49,7 +49,7 @@ func (*tasksApi) ReadAll(r *ghttp.Request) {
 func (*tasksApi) ReadOne(r *ghttp.Request) {
 	id := r.GetRouterVar("id").Uint64()
 	var task model.Task
-	if err := dao.Task.Ctx(r.Context()).Where("id = ", id).Struct(&task); err != nil {
+	if err := dao.Task.Ctx(r.Context()).Where("id = ", id).Scan(&task); err != nil {
 		response.Json(r, response.ErrorNotExist, "", nil)
 	}
 	var taskRsp model.TaskApiResponse
@@ -140,7 +140,7 @@ func (*tasksApi) Update(r *ghttp.Request) {
 		response.Json(r, response.ErrorUpdateFail, "", err)
 	} else {
 		var tasks model.Task
-		if err := dao.Task.Ctx(r.Context()).Where("id = ", id).Struct(&tasks); err != nil {
+		if err := dao.Task.Ctx(r.Context()).Where("id = ", id).Scan(&tasks); err != nil {
 			response.Json(r, response.ErrorNotExist, "", nil)
 		}
 		var taskRsp model.TaskApiResponse

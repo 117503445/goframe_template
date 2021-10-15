@@ -52,7 +52,7 @@ func Json(r *ghttp.Request, code int, message string, data interface{}) {
 	r.Exit()
 }
 
-// ErrorResp 内部错误
+// ErrorResp 返回错误
 func ErrorResp(r *ghttp.Request, err error) {
 	Json(r, Error, "", err)
 }

@@ -16,9 +16,14 @@ func (s *taskService) GetById(ctx context.Context, id uint64) (*model.Task, erro
 	var task *model.Task
 	if err := dao.Task.Ctx(ctx).Where(dao.Task.Columns.Id, id).Scan(&task); err != nil {
 		return nil, err
-	} else {
-		return task, nil
 	}
+
+	if task == nil {
+		return nil, gerror.NewCode(gcode.CodeNotFound, "")
+	}
+
+	return task, nil
+
 }
 
 func (s *taskService) DeleteById(ctx context.Context, id uint64) error {

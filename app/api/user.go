@@ -36,7 +36,7 @@ func (*userApi) SignUp(r *ghttp.Request) {
 		response.Json(r, response.Fail, "", err)
 	}
 	if err := service.User.SignUp(r.Context(), serviceReq); err != nil {
-		response.Json(r, response.ErrorCreateFail, "", err)
+		response.ErrorResp(r, err)
 	} else {
 		response.Json(r, response.Success, "", nil)
 	}

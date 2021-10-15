@@ -50,9 +50,6 @@ func (*tasksApi) ReadOne(r *ghttp.Request) {
 	if err != nil {
 		response.ErrorResp(r, err)
 	}
-	if task == nil {
-		response.Json(r, response.ErrorNotExist, "", nil)
-	}
 
 	var taskRsp model.TaskApiResponse
 	if err := gconv.Struct(task, &taskRsp); err != nil {
@@ -77,13 +74,13 @@ func (*tasksApi) Create(r *ghttp.Request) {
 		task   *model.Task
 	)
 	if err := r.Parse(&apiReq); err != nil {
-		response.Json(r, response.ErrorCreateFail, "", nil)
+		response.ErrorResp(r, err)
 	}
 	if err := gconv.Struct(apiReq, &task); err != nil {
-		response.Json(r, response.ErrorCreateFail, "", nil)
+		response.ErrorResp(r, err)
 	}
 	if result, err := dao.Task.Ctx(r.Context()).Insert(task); err != nil {
-		response.Json(r, response.ErrorCreateFail, "", nil)
+		response.ErrorResp(r, err)
 	} else {
 		id, _ := result.LastInsertId()
 		task.Id = gconv.Uint64(id)
@@ -110,7 +107,7 @@ func (*tasksApi) Delete(r *ghttp.Request) {
 
 	err := service.Task.DeleteById(r.Context(), id)
 	if err != nil {
-		response.Json(r, response.Error, "", err)
+		response.ErrorResp(r, err)
 	}
 	response.Json(r, response.Success, "", nil)
 }
@@ -135,11 +132,11 @@ func (*tasksApi) Update(r *ghttp.Request) {
 	}
 
 	if _, err := dao.Task.Ctx(r.Context()).Data(bodyMap).Where("id", id).Update(); err != nil {
-		response.Json(r, response.ErrorUpdateFail, "", err)
+		response.ErrorResp(r, err)
 	} else {
 		var tasks model.Task
 		if err := dao.Task.Ctx(r.Context()).Where("id = ", id).Scan(&tasks); err != nil {
-			response.Json(r, response.ErrorNotExist, "", nil)
+			response.ErrorResp(r, err)
 		}
 		var taskRsp model.TaskApiResponse
 		if err := gconv.Struct(tasks, &taskRsp); err != nil {

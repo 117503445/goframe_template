@@ -2,6 +2,8 @@ package service
 
 import (
 	"context"
+	"github.com/gogf/gf/errors/gcode"
+	"github.com/gogf/gf/errors/gerror"
 	"goframe_template/app/dao"
 	"goframe_template/app/model"
 )
@@ -17,4 +19,18 @@ func (s *taskService) GetById(ctx context.Context, id uint64) (*model.Task, erro
 	} else {
 		return task, nil
 	}
+}
+
+func (s *taskService) DeleteById(ctx context.Context, id uint64) error {
+
+	count, err := dao.Task.Ctx(ctx).Count(dao.Task.Columns.Id, id)
+	if err != nil {
+		return err
+	}
+	if count == 0 {
+		return gerror.NewCode(gcode.CodeNotFound, "")
+	}
+
+	_, err = dao.Task.Ctx(ctx).Delete(dao.Task.Columns.Id, id)
+	return err
 }

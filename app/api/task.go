@@ -46,17 +46,20 @@ func (*tasksApi) ReadAll(r *ghttp.Request) {
 func (*tasksApi) ReadOne(r *ghttp.Request) {
 	id := r.GetRouterVar("id").Uint64()
 
-	if task, err := service.Task.GetById(r.Context(), id); err != nil || task == nil {
+	task, err := service.Task.GetById(r.Context(), id)
+	if err != nil {
+		response.ErrorResp(r, err)
+	}
+	if task == nil {
 		response.Json(r, response.ErrorNotExist, "", nil)
-	} else {
-		var taskRsp model.TaskApiResponse
-		if err := gconv.Struct(task, &taskRsp); err != nil {
-			response.Json(r, response.Error, "", err)
-		} else {
-			response.Json(r, response.Success, "", taskRsp)
-		}
 	}
 
+	var taskRsp model.TaskApiResponse
+	if err := gconv.Struct(task, &taskRsp); err != nil {
+		response.ErrorResp(r, err)
+	} else {
+		response.Json(r, response.Success, "", taskRsp)
+	}
 }
 
 // Create
@@ -105,14 +108,9 @@ func (*tasksApi) Create(r *ghttp.Request) {
 func (*tasksApi) Delete(r *ghttp.Request) {
 	id := r.GetRouterVar("id").Uint64()
 
-	if count, err := dao.Task.Ctx(r.Context()).Where("id = ", id).Count(); err != nil {
-		response.Json(r, response.Fail, "", nil)
-	} else if count == 0 {
-		response.Json(r, response.ErrorNotExist, "", nil)
-	}
-
-	if _, err := dao.Task.Ctx(r.Context()).Where("id", id).Delete(); err != nil {
-		response.Json(r, response.Error, "", nil)
+	err := service.Task.DeleteById(r.Context(), id)
+	if err != nil {
+		response.Json(r, response.Error, "", err)
 	}
 	response.Json(r, response.Success, "", nil)
 }

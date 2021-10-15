@@ -3,6 +3,7 @@ package api
 import (
 	"goframe_template/app/dao"
 	"goframe_template/app/model"
+	"goframe_template/app/service"
 	"goframe_template/library/response"
 
 	"github.com/gogf/gf/frame/g"
@@ -44,15 +45,18 @@ func (*tasksApi) ReadAll(r *ghttp.Request) {
 // @Router /api/task/{id} [get]
 func (*tasksApi) ReadOne(r *ghttp.Request) {
 	id := r.GetRouterVar("id").Uint64()
-	var task model.Task
-	if err := dao.Task.Ctx(r.Context()).Where("id = ", id).Scan(&task); err != nil {
+
+	if task, err := service.Task.GetById(r.Context(), id); err != nil || task == nil {
 		response.Json(r, response.ErrorNotExist, "", nil)
+	} else {
+		var taskRsp model.TaskApiResponse
+		if err := gconv.Struct(task, &taskRsp); err != nil {
+			response.Json(r, response.Error, "", err)
+		} else {
+			response.Json(r, response.Success, "", taskRsp)
+		}
 	}
-	var taskRsp model.TaskApiResponse
-	if err := gconv.Struct(task, &taskRsp); err != nil {
-		g.Log().Line().Error(err)
-	}
-	response.Json(r, response.Success, "", taskRsp)
+
 }
 
 // Create

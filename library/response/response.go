@@ -2,9 +2,9 @@ package response
 
 import (
 	"fmt"
+	"github.com/gogf/gf/errors/gerror"
 	"github.com/gogf/gf/frame/g"
 	"github.com/gogf/gf/net/ghttp"
-	"go/types"
 )
 
 //JsonResponse 返回通用JSON数据结构
@@ -24,11 +24,11 @@ func Json(r *ghttp.Request, code int, message string, data interface{}) {
 
 	switch d := data.(type) {
 	case error:
-		data = d.Error()
-	case types.Array:
-		g.Log().Line().Debug("types.Array")
-		if d.Len() == 0 {
-			data = "[]"
+		if g.Cfg().GetBool("server.returnErrStack") {
+			data = gerror.Stack(d)
+		} else {
+			g.Log().Line().Error(d)
+			data = ""
 		}
 	}
 

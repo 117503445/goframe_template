@@ -5,6 +5,7 @@ ServerAgent = "goframe_template"
 LogPath = "./data/log/goframe_template/server"
 DumpRouterMap = false
 corsAllowDomain = ["localhost"]
+returnErrStack = false
 
 # Logger.
 [logger]
@@ -26,7 +27,7 @@ randomAdminPasswordOnCreate = true
 
 # Database logger.
 [database.logger]
-Path = "./data/log/gf-app/sql"
+Path = "./data/log/goframe_template/sql"
 Level = "all"
 Stdout = false
 

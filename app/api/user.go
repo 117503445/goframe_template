@@ -1,6 +1,7 @@
 package api
 
 import (
+	jwt "github.com/gogf/gf-jwt"
 	"goframe_template/app/model"
 	"goframe_template/app/service"
 	"goframe_template/library/response"
@@ -41,6 +42,35 @@ func (*userApi) SignUp(r *ghttp.Request) {
 	}
 }
 
+// Login is used to validate login parameters.
+// It must return user data as user identifier, it will be stored in Claim Array.
+// Check error (e) to determine the appropriate error message.
+// @summary 用户登录
+// @tags    user
+// @accept json
+// @produce json
+// @Param b body model.UserApiLoginReq true "UserApiLoginReq"
+// @router  /api/user/login [POST]
+// @success 200 {object} response.JsonResponse
+func Login(r *ghttp.Request) (interface{}, error) {
+	var (
+		apiReq     *model.UserApiLoginReq
+		serviceReq *model.UserServiceLoginReq
+	)
+	if err := r.Parse(&apiReq); err != nil {
+		return "", err
+	}
+	if err := gconv.Struct(apiReq, &serviceReq); err != nil {
+		return "", err
+	}
+
+	if user := service.User.GetUserByUsernamePassword(r.Context(), serviceReq); user != nil {
+		return user, nil
+	}
+
+	return nil, jwt.ErrFailedAuthentication
+}
+
 // GetInfo
 // @summary 用户获取自己的信息
 // @tags    user
@@ -58,10 +88,8 @@ func (*userApi) GetInfo(r *ghttp.Request) {
 
 		roleNames := g.Array{}
 		for _, r := range roles {
-			// g.Log().Line().Debug(r.Name)
 			roleNames = append(roleNames, r.Name)
 		}
-		// g.Log().Line().Debug(dao.HasRole(user,"admin"))
 		response.Json(r, response.Success, "", g.Map{"id": user.Id, "username": user.Username, "roles": roleNames})
 	}
 }

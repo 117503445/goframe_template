@@ -27,7 +27,7 @@ func JWTLogin(r *ghttp.Request) {
 // rewrite this function to customized your own JWT settings.
 func init() {
 
-	pathJWT := "./tmp/password/jwt.txt"
+	pathJWT := "./data/password/jwt.txt"
 	var key string
 	if gfile.Exists(pathJWT) {
 		key = gfile.GetContents(pathJWT)

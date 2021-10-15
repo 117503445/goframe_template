@@ -10,7 +10,7 @@ services:
     volumes:
       - ./config/config.toml:/root/config/config.toml
       - ./document:/root/document
-      - ./tmp:/root/tmp
+      - ./data:/root/data
     depends_on:
       - db
   db:

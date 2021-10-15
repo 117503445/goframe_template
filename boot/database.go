@@ -80,7 +80,7 @@ func InitDatabase() {
 			if cipher, err := service.User.EncryptPassword(context.TODO(), adminPassword); err != nil {
 				g.Log().Line().Panic(err)
 			} else {
-				if err = gfile.PutContents("./tmp/password/admin.txt", adminPassword); err != nil {
+				if err = gfile.PutContents("./data/password/admin.txt", adminPassword); err != nil {
 					g.Log().Line().Error(err)
 				}
 				var user *model.User

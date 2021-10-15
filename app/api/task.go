@@ -22,6 +22,7 @@ type tasksApi struct{}
 // @Success 200 {array} model.TaskApiResponse
 // @Router /api/task [get]
 func (*tasksApi) ReadAll(r *ghttp.Request) {
+	// todo 分页
 	tasks := make([]model.Task, 0)
 	if err := dao.Task.Ctx(r.Context()).Scan(&tasks); err != nil {
 		response.Json(r, response.Error, "", nil)

@@ -4,6 +4,7 @@ Address = ":8080"
 ServerAgent = "goframe_template"
 LogPath = "./data/log/goframe_template/server"
 DumpRouterMap = false
+corsAllowDomain = ["localhost"]
 
 # Logger.
 [logger]

@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"github.com/gogf/gf/frame/g"
 	"github.com/gogf/gf/net/ghttp"
+	"go/types"
 )
 
 //JsonResponse 返回通用JSON数据结构
@@ -24,6 +25,11 @@ func Json(r *ghttp.Request, code int, message string, data interface{}) {
 	switch d := data.(type) {
 	case error:
 		data = d.Error()
+	case types.Array:
+		g.Log().Line().Debug("types.Array")
+		if d.Len() == 0 {
+			data = "[]"
+		}
 	}
 
 	if err := r.Response.WriteJson(JsonResponse{

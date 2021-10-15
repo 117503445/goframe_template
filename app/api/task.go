@@ -22,20 +22,15 @@ type tasksApi struct{}
 // @Success 200 {array} model.TaskApiResponse
 // @Router /api/task [get]
 func (*tasksApi) ReadAll(r *ghttp.Request) {
-	var tasks []model.Task
+	tasks := make([]model.Task, 0)
 	if err := dao.Task.Ctx(r.Context()).Scan(&tasks); err != nil {
 		response.Json(r, response.Error, "", nil)
 	}
-	if len(tasks) == 0 {
-		r.Response.Write("[]") //todo
-		r.Exit()
-	} else {
-		var tasksRsp []model.TaskApiResponse
-		if err := gconv.Structs(tasks, &tasksRsp); err != nil {
-			g.Log().Line().Error(err)
-		}
-		response.Json(r, response.Success, "", tasksRsp)
+	tasksRsp := make([]model.TaskApiResponse, 0)
+	if err := gconv.Structs(tasks, &tasksRsp); err != nil {
+		g.Log().Line().Error(err)
 	}
+	response.Json(r, response.Success, "", tasksRsp)
 }
 
 // ReadOne

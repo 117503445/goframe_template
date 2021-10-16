@@ -11,7 +11,7 @@
         "license": {
             "name": "GNU GPL 3.0"
         },
-        "version": "1.5.0"
+        "version": "1.6.0"
     },
     "paths": {
         "/": {
@@ -125,7 +125,42 @@
                     }
                 }
             },
-            "put": {
+            "delete": {
+                "security": [
+                    {
+                        "JWT": []
+                    }
+                ],
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "任务"
+                ],
+                "summary": "删除一个任务",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "default": 1,
+                        "description": "任务id",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "{\"message\": \"delete success\"}",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            },
+            "patch": {
                 "security": [
                     {
                         "JWT": []
@@ -165,41 +200,6 @@
                         "description": "OK",
                         "schema": {
                             "$ref": "#/definitions/model.TaskApiResponse"
-                        }
-                    }
-                }
-            },
-            "delete": {
-                "security": [
-                    {
-                        "JWT": []
-                    }
-                ],
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "任务"
-                ],
-                "summary": "删除一个任务",
-                "parameters": [
-                    {
-                        "type": "integer",
-                        "default": 1,
-                        "description": "任务id",
-                        "name": "id",
-                        "in": "path",
-                        "required": true
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "{\"message\": \"delete success\"}",
-                        "schema": {
-                            "type": "string"
                         }
                     }
                 }

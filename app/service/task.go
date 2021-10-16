@@ -27,7 +27,6 @@ func (s *taskService) GetById(ctx context.Context, id uint64) (*model.Task, erro
 }
 
 func (s *taskService) DeleteById(ctx context.Context, id uint64) error {
-
 	count, err := dao.Task.Ctx(ctx).Count(dao.Task.Columns.Id, id)
 	if err != nil {
 		return err
@@ -38,4 +37,12 @@ func (s *taskService) DeleteById(ctx context.Context, id uint64) error {
 
 	_, err = dao.Task.Ctx(ctx).Delete(dao.Task.Columns.Id, id)
 	return err
+}
+
+func (s *taskService) PatchById(ctx context.Context, id uint64, data map[string]interface{}) (*model.Task, error) {
+	if _, err := dao.Task.Ctx(ctx).Data(data).Where(dao.Task.Columns.Id, id).Update(); err != nil {
+		return nil, err
+	}
+	task, err := s.GetById(ctx, id)
+	return task, err
 }

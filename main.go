@@ -8,7 +8,7 @@ import (
 )
 
 // @title       goframe_template API
-// @version     1.6.0
+// @version     1.6.1
 // @description `goframe_template` 117503445 的 goframe 学习/模板项目 api
 
 // @contact.name 117503445

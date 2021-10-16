@@ -1,10 +1,14 @@
 package api
 
 import (
+	"fmt"
+	"github.com/gogf/gf/container/gset"
+	"github.com/gogf/gf/errors/gcode"
 	"goframe_template/app/dao"
 	"goframe_template/app/model"
 	"goframe_template/app/service"
 	"goframe_template/library/response"
+	"strings"
 
 	"github.com/gogf/gf/frame/g"
 	"github.com/gogf/gf/net/ghttp"
@@ -112,6 +116,13 @@ func (*tasksApi) Delete(r *ghttp.Request) {
 	response.Json(r, response.Success, "", nil)
 }
 
+var s *gset.Set
+
+func init() {
+	s = gset.New(true)
+	s.Add(strings.ToLower(dao.Task.Columns.Done), strings.ToLower(dao.Task.Columns.Title)) // white list
+}
+
 // Update
 // @Summary 更改一个任务
 // @Tags 任务
@@ -120,28 +131,28 @@ func (*tasksApi) Delete(r *ghttp.Request) {
 // @Param   id      path int true  "任务id" default(1)
 // @Param   tasks      body model.TaskApiRequest true  "任务"
 // @Success 200 {object} model.TaskApiResponse
-// @Router /api/task/{id} [PUT]
+// @Router /api/task/{id} [PATCH]
 // @Security JWT
 func (*tasksApi) Update(r *ghttp.Request) {
 	id := r.GetRouterVar("id").Uint64()
 
 	bodyMap := gconv.Map(r.GetBodyString())
 
-	if _, ok := bodyMap["id"]; ok {
-		response.Json(r, response.Fail, "shouldn't pass id in POST method", nil)
+	for k, _ := range bodyMap {
+		if !s.Contains(strings.ToLower(k)) {
+			response.Json(r, gcode.CodeInvalidRequest.Code(), fmt.Sprintf("shouldn't pass %v in Body", k), nil)
+		}
 	}
 
-	if _, err := dao.Task.Ctx(r.Context()).Data(bodyMap).Where("id", id).Update(); err != nil {
+	task, err := service.Task.PatchById(r.Context(), id, bodyMap)
+	if err != nil {
+		response.ErrorResp(r, err)
+	}
+
+	var taskRsp model.TaskApiResponse
+	if err := gconv.Struct(task, &taskRsp); err != nil {
 		response.ErrorResp(r, err)
 	} else {
-		var tasks model.Task
-		if err := dao.Task.Ctx(r.Context()).Where("id = ", id).Scan(&tasks); err != nil {
-			response.ErrorResp(r, err)
-		}
-		var taskRsp model.TaskApiResponse
-		if err := gconv.Struct(tasks, &taskRsp); err != nil {
-			g.Log().Line().Error(err)
-		}
 		response.Json(r, response.Success, "", taskRsp)
 	}
 }

@@ -33,10 +33,11 @@ func Json(r *ghttp.Request, code int, message string, data interface{}) {
 			code = gerror.Code(d).Code()
 		}
 
+		g.Log().Line().Error(d)
+
 		if g.Cfg().GetBool("server.returnErrStack") {
 			data = gerror.Stack(d)
 		} else {
-			g.Log().Line().Error(d)
 			data = nil
 		}
 	}

@@ -25,6 +25,16 @@ func (s *taskService) GetById(ctx context.Context, id uint64) (*model.Task, erro
 	return task, nil
 }
 
+func (s *taskService) GetAll(ctx context.Context) ([]model.Task, error) {
+	tasks := ([]model.Task)(nil)
+
+	if err := dao.Task.Ctx(ctx).Scan(&tasks); err != nil {
+		return nil, err
+	} else {
+		return tasks, nil
+	}
+}
+
 func (s *taskService) Create(ctx context.Context, task *model.Task) error {
 	if result, err := dao.Task.Ctx(ctx).Insert(task); err != nil {
 		return err

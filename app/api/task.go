@@ -10,7 +10,6 @@ import (
 	"goframe_template/library/response"
 	"strings"
 
-	"github.com/gogf/gf/frame/g"
 	"github.com/gogf/gf/net/ghttp"
 	"github.com/gogf/gf/util/gconv"
 )
@@ -27,14 +26,14 @@ type tasksApi struct{}
 // @Success 200 {array} model.TaskApiResponse
 // @Router /api/task [get]
 func (*tasksApi) ReadAll(r *ghttp.Request) {
-	// todo 分页
-	tasks := make([]model.Task, 0)
-	if err := dao.Task.Ctx(r.Context()).Scan(&tasks); err != nil {
-		response.Json(r, response.Error, "", nil)
+	tasks, err := service.Task.GetAll(r.Context())
+	if err != nil {
+		panic(err)
 	}
+
 	tasksRsp := make([]model.TaskApiResponse, 0)
 	if err := gconv.Structs(tasks, &tasksRsp); err != nil {
-		g.Log().Line().Error(err)
+		panic(err)
 	}
 	response.Json(r, response.Success, "", tasksRsp)
 }
@@ -52,12 +51,12 @@ func (*tasksApi) ReadOne(r *ghttp.Request) {
 
 	task, err := service.Task.GetById(r.Context(), id)
 	if err != nil {
-		response.ErrorResp(r, err)
+		panic(err)
 	}
 
 	var taskRsp model.TaskApiResponse
 	if err := gconv.Struct(task, &taskRsp); err != nil {
-		response.ErrorResp(r, err)
+		panic(err)
 	} else {
 		response.Json(r, response.Success, "", taskRsp)
 	}
@@ -78,19 +77,18 @@ func (*tasksApi) Create(r *ghttp.Request) {
 		task   *model.Task
 	)
 	if err := r.Parse(&apiReq); err != nil {
-		response.ErrorResp(r, err)
+		panic(err)
 	}
 	if err := gconv.Struct(apiReq, &task); err != nil {
-		response.ErrorResp(r, err)
+		panic(err)
 	}
-
 	if err := service.Task.Create(r.Context(), task); err != nil {
-		response.ErrorResp(r, err)
+		panic(err)
 	}
 
 	var taskRsp model.TaskApiResponse
 	if err := gconv.Struct(task, &taskRsp); err != nil {
-		response.ErrorResp(r, err)
+		panic(err)
 	}
 
 	response.Json(r, response.Success, "", taskRsp)
@@ -110,7 +108,7 @@ func (*tasksApi) Delete(r *ghttp.Request) {
 
 	err := service.Task.DeleteById(r.Context(), id)
 	if err != nil {
-		response.ErrorResp(r, err)
+		panic(err)
 	}
 	response.Json(r, response.Success, "", nil)
 }
@@ -145,12 +143,12 @@ func (*tasksApi) Update(r *ghttp.Request) {
 
 	task, err := service.Task.PatchById(r.Context(), id, bodyMap)
 	if err != nil {
-		response.ErrorResp(r, err)
+		panic(err)
 	}
 
 	var taskRsp model.TaskApiResponse
 	if err := gconv.Struct(task, &taskRsp); err != nil {
-		response.ErrorResp(r, err)
+		panic(err)
 	} else {
 		response.Json(r, response.Success, "", taskRsp)
 	}

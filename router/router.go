@@ -11,7 +11,7 @@ import (
 func init() {
 	s := g.Server()
 	s.Group("/", func(group *ghttp.RouterGroup) {
-		group.Middleware(middleware.CORS, middleware.HttpLog)
+		group.Middleware(middleware.CORS, middleware.HttpLog, middleware.ErrorHandler)
 		group.ALL("/", api.Hello)
 		group.Group("/api", func(group *ghttp.RouterGroup) {
 			group.Group("/user", func(group *ghttp.RouterGroup) {

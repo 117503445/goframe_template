@@ -23,7 +23,19 @@ func (s *taskService) GetById(ctx context.Context, id uint64) (*model.Task, erro
 	}
 
 	return task, nil
+}
 
+func (s *taskService) Create(ctx context.Context, task *model.Task) error {
+	if result, err := dao.Task.Ctx(ctx).Insert(task); err != nil {
+		return err
+	} else {
+		id, err := result.LastInsertId()
+		if err != nil {
+			return err
+		}
+		task.Id = uint64(id)
+		return nil
+	}
 }
 
 func (s *taskService) DeleteById(ctx context.Context, id uint64) error {

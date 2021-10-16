@@ -83,18 +83,17 @@ func (*tasksApi) Create(r *ghttp.Request) {
 	if err := gconv.Struct(apiReq, &task); err != nil {
 		response.ErrorResp(r, err)
 	}
-	if result, err := dao.Task.Ctx(r.Context()).Insert(task); err != nil {
-		response.ErrorResp(r, err)
-	} else {
-		id, _ := result.LastInsertId()
-		task.Id = gconv.Uint64(id)
 
-		var taskRsp model.TaskApiResponse
-		if err := gconv.Struct(task, &taskRsp); err != nil {
-			g.Log().Line().Error(err)
-		}
-		response.Json(r, response.Success, "", taskRsp)
+	if err := service.Task.Create(r.Context(), task); err != nil {
+		response.ErrorResp(r, err)
 	}
+
+	var taskRsp model.TaskApiResponse
+	if err := gconv.Struct(task, &taskRsp); err != nil {
+		response.ErrorResp(r, err)
+	}
+
+	response.Json(r, response.Success, "", taskRsp)
 }
 
 // Delete

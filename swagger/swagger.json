@@ -11,7 +11,7 @@
         "license": {
             "name": "GNU GPL 3.0"
         },
-        "version": "1.6.0"
+        "version": "1.6.3"
     },
     "paths": {
         "/": {
@@ -44,15 +44,26 @@
                 "tags": [
                     "任务"
                 ],
-                "summary": "获取所有任务",
+                "summary": "分页获取任务",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "current page index",
+                        "name": "curPage",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "page size",
+                        "name": "pageSize",
+                        "in": "query"
+                    }
+                ],
                 "responses": {
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "type": "array",
-                            "items": {
-                                "$ref": "#/definitions/model.TaskApiResponse"
-                            }
+                            "$ref": "#/definitions/response.JsonResponse"
                         }
                     }
                 }
@@ -88,7 +99,7 @@
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/model.TaskApiResponse"
+                            "$ref": "#/definitions/response.JsonResponse"
                         }
                     }
                 }
@@ -120,7 +131,7 @@
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/model.TaskApiResponse"
+                            "$ref": "#/definitions/response.JsonResponse"
                         }
                     }
                 }
@@ -153,9 +164,9 @@
                 ],
                 "responses": {
                     "200": {
-                        "description": "{\"message\": \"delete success\"}",
+                        "description": "OK",
                         "schema": {
-                            "type": "string"
+                            "$ref": "#/definitions/response.JsonResponse"
                         }
                     }
                 }
@@ -199,7 +210,7 @@
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/model.TaskApiResponse"
+                            "$ref": "#/definitions/response.JsonResponse"
                         }
                     }
                 }
@@ -306,20 +317,6 @@
                 },
                 "Title": {
                     "type": "string"
-                }
-            }
-        },
-        "model.TaskApiResponse": {
-            "type": "object",
-            "properties": {
-                "Done": {
-                    "type": "boolean"
-                },
-                "Title": {
-                    "type": "string"
-                },
-                "id": {
-                    "type": "integer"
                 }
             }
         },

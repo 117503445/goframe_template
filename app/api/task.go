@@ -18,24 +18,27 @@ var Task = new(tasksApi)
 
 type tasksApi struct{}
 
-// ReadAll
-// @Summary 获取所有任务
+// ReadPage
+// @Summary 分页获取任务
 // @Tags 任务
 // @Accept  json
 // @Produce  json
-// @Success 200 {array} model.TaskApiResponse
+// @Param curPage query int false "current page index"
+// @Param pageSize query int false "page size"
+// @Success 200 {object} response.JsonResponse
 // @Router /api/task [get]
-func (*tasksApi) ReadAll(r *ghttp.Request) {
-	tasks, err := service.Task.GetAll(r.Context())
+func (*tasksApi) ReadPage(r *ghttp.Request) {
+	pageData, err := service.Task.GetPage(r.Context(), r.GetInt("curPage"), r.GetInt("pageSize"))
 	if err != nil {
 		panic(err)
 	}
 
 	tasksRsp := make([]model.TaskApiResponse, 0)
-	if err := gconv.Structs(tasks, &tasksRsp); err != nil {
+	if err := gconv.Structs(pageData.Items, &tasksRsp); err != nil {
 		panic(err)
 	}
-	response.Json(r, response.Success, "", tasksRsp)
+	pageData.Items = tasksRsp
+	response.Json(r, response.Success, "", pageData)
 }
 
 // ReadOne
@@ -44,7 +47,7 @@ func (*tasksApi) ReadAll(r *ghttp.Request) {
 // @Accept  json
 // @Produce  json
 // @Param   id      path int true  "任务id" default(1)
-// @Success 200 {object} model.TaskApiResponse
+// @Success 200 {object} response.JsonResponse
 // @Router /api/task/{id} [get]
 func (*tasksApi) ReadOne(r *ghttp.Request) {
 	id := r.GetRouterVar("id").Uint64()
@@ -68,7 +71,7 @@ func (*tasksApi) ReadOne(r *ghttp.Request) {
 // @Accept  json
 // @Produce  json
 // @Param   tasks      body model.TaskApiRequest true  "任务"
-// @Success 200 {object} model.TaskApiResponse
+// @Success 200 {object} response.JsonResponse
 // @Router /api/task [POST]
 // @Security JWT
 func (*tasksApi) Create(r *ghttp.Request) {
@@ -100,7 +103,7 @@ func (*tasksApi) Create(r *ghttp.Request) {
 // @Accept  json
 // @Produce  json
 // @Param   id      path int true  "任务id" default(1)
-// @Success 200 {string} string "{"message": "delete success"}"
+// @Success 200 {object} response.JsonResponse
 // @Router /api/task/{id} [DELETE]
 // @Security JWT
 func (*tasksApi) Delete(r *ghttp.Request) {
@@ -127,7 +130,7 @@ func init() {
 // @Produce  json
 // @Param   id      path int true  "任务id" default(1)
 // @Param   tasks      body model.TaskApiRequest true  "任务"
-// @Success 200 {object} model.TaskApiResponse
+// @Success 200 {object} response.JsonResponse
 // @Router /api/task/{id} [PATCH]
 // @Security JWT
 func (*tasksApi) Update(r *ghttp.Request) {
@@ -135,7 +138,7 @@ func (*tasksApi) Update(r *ghttp.Request) {
 
 	bodyMap := gconv.Map(r.GetBodyString())
 
-	for k, _ := range bodyMap {
+	for k := range bodyMap {
 		if !s.Contains(strings.ToLower(k)) {
 			response.Json(r, gcode.CodeInvalidRequest.Code(), fmt.Sprintf("shouldn't pass %v in Body", k), nil)
 		}

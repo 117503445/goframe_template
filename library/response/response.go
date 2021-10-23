@@ -6,14 +6,22 @@ import (
 	"github.com/gogf/gf/net/ghttp"
 )
 
-//JsonResponse 返回通用JSON数据结构
+//JsonResponse 通用返回
 type JsonResponse struct {
 	Code    int         `json:"code"` // 错误码((0:成功, 1:失败, >1:错误码))
 	Message string      `json:"msg"`  // 提示信息
 	Data    interface{} `json:"data"` // 返回数据(业务接口定义具体数据结构)
 }
 
-//Json 返回JSON数据并退出当前HTTP执行函数。
+// PageData 分页数据
+type PageData struct {
+	PageNum int `json:"pageNum"`
+	Total   int `json:"total"`
+
+	Items interface{} `json:"items"`
+}
+
+//Json 返回 JSON 数据并退出当前 HTTP 执行函数。
 func Json(r *ghttp.Request, code int, message string, data interface{}) {
 	if message == "" {
 		message = GetMsg(code)

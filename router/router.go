@@ -22,7 +22,7 @@ func init() {
 			})
 
 			group.Group("/task", func(group *ghttp.RouterGroup) {
-				group.GET("/", api.Task.ReadAll)
+				group.GET("/", api.Task.ReadPage)
 				group.GET("/{id}", api.Task.ReadOne)
 				group.Middleware(middleware.JWTLogin, middleware.NeedRole("admin"))
 				group.POST("/", api.Task.Create)

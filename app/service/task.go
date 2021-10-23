@@ -6,6 +6,7 @@ import (
 	"github.com/gogf/gf/errors/gerror"
 	"goframe_template/app/dao"
 	"goframe_template/app/model"
+	"goframe_template/library/response"
 )
 
 var Task = new(taskService)
@@ -25,14 +26,37 @@ func (s *taskService) GetById(ctx context.Context, id uint64) (*model.Task, erro
 	return task, nil
 }
 
-func (s *taskService) GetAll(ctx context.Context) ([]model.Task, error) {
+func (s *taskService) GetPage(ctx context.Context, curPage int, pageSize int) (*response.PageData, error) {
+	count, err := dao.Task.Ctx(ctx).Count()
+	if err != nil {
+		return nil, err
+	}
+
+	pageData := new(response.PageData)
+
 	tasks := ([]model.Task)(nil)
 
-	if err := dao.Task.Ctx(ctx).Scan(&tasks); err != nil {
-		return nil, err
+	if pageSize == 0 {
+		if err := dao.Task.Ctx(ctx).Scan(&tasks); err != nil {
+			return nil, err
+		}
 	} else {
-		return tasks, nil
+		start := (curPage - 1) * pageSize
+		limit := pageSize
+		if err := dao.Task.Ctx(ctx).Limit(start, limit).Scan(&tasks); err != nil {
+			return nil, err
+		}
 	}
+
+	pageData.Items = tasks
+	pageData.Total = count
+	if pageSize == 0 {
+		pageData.PageNum = 1
+	} else {
+		pageData.PageNum = count / pageSize
+	}
+
+	return pageData, nil
 }
 
 func (s *taskService) Create(ctx context.Context, task *model.Task) error {

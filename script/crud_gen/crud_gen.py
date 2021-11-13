@@ -88,7 +88,7 @@ def gen_router():
         name = cfg['小写']
 
         if name in route:
-            print(f'{name} has already exists, skipped.')
+            print(f'{name} Router has already exists, skipped.')
         else:
             content = fill_template(template, cfg)
             route = route.replace('// crud_gen will insert here', content)

@@ -2,10 +2,10 @@ FROM golang:1.17.2-alpine3.14 as build
 LABEL maintainer="117503445"
 ENV GO111MODULE=on GOPROXY=https://goproxy.cn,direct
 WORKDIR /root/project
+RUN wget -O gf https://ghproxy.com/https://github.com/gogf/gf-cli/releases/download/v1.17.0/gf_linux_amd64 && chmod +x gf && ./gf install
 ADD go.mod .
 ADD go.sum .
 RUN go mod download
-RUN wget https://goframe.org/cli/linux_amd64/gf && chmod +x gf && ./gf install
 ADD . .
 RUN gf swagger --pack -y
 RUN GOOS=linux CGO_ENABLED=0 go build -ldflags="-s -w" -installsuffix cgo -o server_bin

@@ -5,7 +5,7 @@ WORKDIR /root/project
 ADD go.mod .
 ADD go.sum .
 RUN go mod download
-RUN wget https://goframe.org/cli/linux_amd64/gf && chmod +x gf && ./gf install
+RUN wget https://github.com/gogf/gf-cli/releases/download/v1.17.0/gf_linux_amd64 && chmod +x gf && ./gf install
 ADD . .
 RUN gf swagger --pack -y
 RUN GOOS=linux CGO_ENABLED=0 go build -ldflags="-s -w" -installsuffix cgo -o server_bin

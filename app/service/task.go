@@ -34,21 +34,21 @@ func (s *taskService) GetPage(ctx context.Context, curPage int, pageSize int) (*
 
 	pageData := new(response.PageData)
 
-	tasks := ([]model.Task)(nil)
+	taskSlice := ([]model.Task)(nil)
 
 	if pageSize == 0 {
-		if err := dao.Task.Ctx(ctx).Scan(&tasks); err != nil {
+		if err := dao.Task.Ctx(ctx).Scan(&taskSlice); err != nil {
 			return nil, err
 		}
 	} else {
 		start := (curPage - 1) * pageSize
 		limit := pageSize
-		if err := dao.Task.Ctx(ctx).Limit(start, limit).Scan(&tasks); err != nil {
+		if err := dao.Task.Ctx(ctx).Limit(start, limit).Scan(&taskSlice); err != nil {
 			return nil, err
 		}
 	}
 
-	pageData.Items = tasks
+	pageData.Items = taskSlice
 	pageData.Total = count
 	if pageSize == 0 {
 		pageData.PageNum = 1

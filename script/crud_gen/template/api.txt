@@ -1,146 +1,159 @@
 package api
 
 import (
-	"github.com/gogf/gf/frame/g"
+	"fmt"
+	"strings"
+
+	"github.com/gogf/gf/container/gset"
+	"github.com/gogf/gf/errors/gcode"
 	"github.com/gogf/gf/net/ghttp"
 	"github.com/gogf/gf/util/gconv"
+	
 	"goframe_template/app/dao"
 	"goframe_template/app/model"
+	"goframe_template/app/service"
 	"goframe_template/library/response"
 )
 
-var ${大写} = new(${小写}sApi)
+var ${大写} = new(${小写}Api)
 
-type ${小写}sApi struct{}
+type ${小写}Api struct{}
 
-// @Summary 获取所有${中文}
+// ReadPage
+// @Summary 分页获取${中文}
 // @Tags ${中文}
 // @Accept  json
 // @Produce  json
-// @Success 200 {array} model.${大写}ApiResponse
+// @Param curPage query int false "current page index"
+// @Param pageSize query int false "page size"
+// @Success 200 {object} response.JsonResponse
 // @Router /api/${小写} [get]
-func (*${小写}sApi) ReadAll(r *ghttp.Request) {
-	var ${小写}s []model.${大写}
-	if err := dao.${大写}.Structs(&${小写}s); err != nil {
-		response.Json(r, response.Error, "", nil)
+func (*${小写}Api) ReadPage(r *ghttp.Request) {
+	pageData, err := service.${大写}.GetPage(r.Context(), r.GetInt("curPage"), r.GetInt("pageSize"))
+	if err != nil {
+		panic(err)
 	}
-	if len(${小写}s) == 0 {
-		r.Response.Write("[]") //todo
-		r.Exit()
-	} else {
-		var ${小写}sRsp []model.${大写}ApiResponse
-		if err := gconv.Structs(${小写}s, &${小写}sRsp); err != nil {
-			g.Log().Line().Error(err)
-		}
-		response.Json(r, response.Success, "", ${小写}sRsp)
+
+	${小写}RspSlice := make([]model.${大写}ApiResponse, 0)
+	if err := gconv.Structs(pageData.Items, &${小写}RspSlice); err != nil {
+		panic(err)
 	}
+	pageData.Items = ${小写}RspSlice
+	response.Json(r, response.Success, "", pageData)
 }
 
+// ReadOne
 // @Summary 获取一个${中文}
 // @Tags ${中文}
 // @Accept  json
 // @Produce  json
 // @Param   id      path int true  "${中文}id" default(1)
-// @Success 200 {object} model.${大写}ApiResponse
+// @Success 200 {object} response.JsonResponse
 // @Router /api/${小写}/{id} [get]
-func (*${小写}sApi) ReadOne(r *ghttp.Request) {
+func (*${小写}Api) ReadOne(r *ghttp.Request) {
 	id := r.GetRouterVar("id").Uint64()
-	var ${小写} model.${大写}
-	if err := dao.${大写}.Where("id = ", id).Struct(&${小写}); err != nil {
-		response.Json(r, response.ErrorNotExist, "", nil)
+
+	${小写}, err := service.${大写}.GetById(r.Context(), id)
+	if err != nil {
+		panic(err)
 	}
+
 	var ${小写}Rsp model.${大写}ApiResponse
 	if err := gconv.Struct(${小写}, &${小写}Rsp); err != nil {
-		g.Log().Line().Error(err)
+		panic(err)
+	} else {
+		response.Json(r, response.Success, "", ${小写}Rsp)
 	}
-	response.Json(r, response.Success, "", ${小写}Rsp)
 }
 
+// Create
 // @Summary 添加一个${中文}
 // @Tags ${中文}
 // @Accept  json
 // @Produce  json
-// @Param   ${小写}s      body model.${大写}ApiRequest true  "${中文}"
-// @Success 200 {object} model.${大写}ApiResponse
+// @Param   ${小写}      body model.${大写}ApiRequest true  "${中文}"
+// @Success 200 {object} response.JsonResponse
 // @Router /api/${小写} [POST]
 // @Security JWT
-func (*${小写}sApi) Create(r *ghttp.Request) {
+func (*${小写}Api) Create(r *ghttp.Request) {
 	var (
 		apiReq *model.${大写}ApiRequest
 		${小写}   *model.${大写}
 	)
 	if err := r.Parse(&apiReq); err != nil {
-		response.Json(r, response.ErrorCreateFail, "", nil)
+		panic(err)
 	}
 	if err := gconv.Struct(apiReq, &${小写}); err != nil {
-		response.Json(r, response.ErrorCreateFail, "", nil)
+		panic(err)
 	}
-	if result, err := dao.${大写}.Insert(${小写}); err != nil {
-		response.Json(r, response.ErrorCreateFail, "", nil)
-	} else {
-		id, _ := result.LastInsertId()
-		${小写}.Id = gconv.Uint64(id)
+	if err := service.${大写}.Create(r.Context(), ${小写}); err != nil {
+		panic(err)
+	}
 
-		var ${小写}Rsp model.${大写}ApiResponse
-		if err := gconv.Struct(${小写}, &${小写}Rsp); err != nil {
-			g.Log().Line().Error(err)
-		}
-		response.Json(r, response.Success, "", ${小写}Rsp)
+	var ${小写}Rsp model.${大写}ApiResponse
+	if err := gconv.Struct(${小写}, &${小写}Rsp); err != nil {
+		panic(err)
 	}
+
+	response.Json(r, response.Success, "", ${小写}Rsp)
 }
 
+// Delete
 // @Summary 删除一个${中文}
 // @Tags ${中文}
 // @Accept  json
 // @Produce  json
 // @Param   id      path int true  "${中文}id" default(1)
-// @Success 200 {string} string "{"message": "delete success"}"
+// @Success 200 {object} response.JsonResponse
 // @Router /api/${小写}/{id} [DELETE]
 // @Security JWT
-func (*${小写}sApi) Delete(r *ghttp.Request) {
+func (*${小写}Api) Delete(r *ghttp.Request) {
 	id := r.GetRouterVar("id").Uint64()
 
-	if count, err := dao.${大写}.Where("id = ", id).Count(); err != nil {
-		response.Json(r, response.Fail, "", nil)
-	} else if count == 0 {
-		response.Json(r, response.ErrorNotExist, "", nil)
-	}
-
-	if _, err := dao.${大写}.Where("id", id).Delete(); err != nil {
-		response.Json(r, response.Error, "", nil)
+	err := service.${大写}.DeleteById(r.Context(), id)
+	if err != nil {
+		panic(err)
 	}
 	response.Json(r, response.Success, "", nil)
 }
 
+var s *gset.Set
+
+func init() {
+	s = gset.New(true)
+	s.Add(strings.ToLower(dao.${大写}.Columns.Done), strings.ToLower(dao.${大写}.Columns.Title)) // white list
+}
+
+// Update
 // @Summary 更改一个${中文}
 // @Tags ${中文}
 // @Accept  json
 // @Produce  json
 // @Param   id      path int true  "${中文}id" default(1)
-// @Param   ${小写}s      body model.${大写}ApiRequest true  "${中文}"
-// @Success 200 {object} model.${大写}ApiResponse
-// @Router /api/${小写}/{id} [PUT]
+// @Param   ${小写}      body model.${大写}ApiRequest true  "${中文}"
+// @Success 200 {object} response.JsonResponse
+// @Router /api/${小写}/{id} [PATCH]
 // @Security JWT
-func (*${小写}sApi) Update(r *ghttp.Request) {
+func (*${小写}Api) Update(r *ghttp.Request) {
 	id := r.GetRouterVar("id").Uint64()
 
 	bodyMap := gconv.Map(r.GetBodyString())
 
-	if _, ok := bodyMap["id"]; ok {
-		response.Json(r, response.Fail, "shouldn't pass id in POST method", nil)
+	for k := range bodyMap {
+		if !s.Contains(strings.ToLower(k)) {
+			response.Json(r, gcode.CodeInvalidRequest.Code(), fmt.Sprintf("shouldn't pass %v in Body", k), nil)
+		}
 	}
 
-	if _, err := dao.${大写}.Data(bodyMap).Where("id", id).Update(); err != nil {
-		response.Json(r, response.ErrorUpdateFail, "", err)
+	${小写}, err := service.${大写}.PatchById(r.Context(), id, bodyMap)
+	if err != nil {
+		panic(err)
+	}
+
+	var ${小写}Rsp model.${大写}ApiResponse
+	if err := gconv.Struct(${小写}, &${小写}Rsp); err != nil {
+		panic(err)
 	} else {
-		var ${小写}s model.${大写}
-		if err := dao.${大写}.Where("id = ", id).Struct(&${小写}s); err != nil {
-			response.Json(r, response.ErrorNotExist, "", nil)
-		}
-		var ${小写}Rsp model.${大写}ApiResponse
-		if err := gconv.Struct(${小写}s, &${小写}Rsp); err != nil {
-			g.Log().Line().Error(err)
-		}
 		response.Json(r, response.Success, "", ${小写}Rsp)
 	}
 }

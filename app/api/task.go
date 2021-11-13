@@ -2,21 +2,22 @@ package api
 
 import (
 	"fmt"
+	"strings"
+
 	"github.com/gogf/gf/container/gset"
 	"github.com/gogf/gf/errors/gcode"
+	"github.com/gogf/gf/net/ghttp"
+	"github.com/gogf/gf/util/gconv"
+	
 	"goframe_template/app/dao"
 	"goframe_template/app/model"
 	"goframe_template/app/service"
 	"goframe_template/library/response"
-	"strings"
-
-	"github.com/gogf/gf/net/ghttp"
-	"github.com/gogf/gf/util/gconv"
 )
 
-var Task = new(tasksApi)
+var Task = new(taskApi)
 
-type tasksApi struct{}
+type taskApi struct{}
 
 // ReadPage
 // @Summary 分页获取任务
@@ -27,17 +28,17 @@ type tasksApi struct{}
 // @Param pageSize query int false "page size"
 // @Success 200 {object} response.JsonResponse
 // @Router /api/task [get]
-func (*tasksApi) ReadPage(r *ghttp.Request) {
+func (*taskApi) ReadPage(r *ghttp.Request) {
 	pageData, err := service.Task.GetPage(r.Context(), r.GetInt("curPage"), r.GetInt("pageSize"))
 	if err != nil {
 		panic(err)
 	}
 
-	tasksRsp := make([]model.TaskApiResponse, 0)
-	if err := gconv.Structs(pageData.Items, &tasksRsp); err != nil {
+	taskRspSlice := make([]model.TaskApiResponse, 0)
+	if err := gconv.Structs(pageData.Items, &taskRspSlice); err != nil {
 		panic(err)
 	}
-	pageData.Items = tasksRsp
+	pageData.Items = taskRspSlice
 	response.Json(r, response.Success, "", pageData)
 }
 
@@ -49,7 +50,7 @@ func (*tasksApi) ReadPage(r *ghttp.Request) {
 // @Param   id      path int true  "任务id" default(1)
 // @Success 200 {object} response.JsonResponse
 // @Router /api/task/{id} [get]
-func (*tasksApi) ReadOne(r *ghttp.Request) {
+func (*taskApi) ReadOne(r *ghttp.Request) {
 	id := r.GetRouterVar("id").Uint64()
 
 	task, err := service.Task.GetById(r.Context(), id)
@@ -70,11 +71,11 @@ func (*tasksApi) ReadOne(r *ghttp.Request) {
 // @Tags 任务
 // @Accept  json
 // @Produce  json
-// @Param   tasks      body model.TaskApiRequest true  "任务"
+// @Param   task      body model.TaskApiRequest true  "任务"
 // @Success 200 {object} response.JsonResponse
 // @Router /api/task [POST]
 // @Security JWT
-func (*tasksApi) Create(r *ghttp.Request) {
+func (*taskApi) Create(r *ghttp.Request) {
 	var (
 		apiReq *model.TaskApiRequest
 		task   *model.Task
@@ -106,7 +107,7 @@ func (*tasksApi) Create(r *ghttp.Request) {
 // @Success 200 {object} response.JsonResponse
 // @Router /api/task/{id} [DELETE]
 // @Security JWT
-func (*tasksApi) Delete(r *ghttp.Request) {
+func (*taskApi) Delete(r *ghttp.Request) {
 	id := r.GetRouterVar("id").Uint64()
 
 	err := service.Task.DeleteById(r.Context(), id)
@@ -129,11 +130,11 @@ func init() {
 // @Accept  json
 // @Produce  json
 // @Param   id      path int true  "任务id" default(1)
-// @Param   tasks      body model.TaskApiRequest true  "任务"
+// @Param   task      body model.TaskApiRequest true  "任务"
 // @Success 200 {object} response.JsonResponse
 // @Router /api/task/{id} [PATCH]
 // @Security JWT
-func (*tasksApi) Update(r *ghttp.Request) {
+func (*taskApi) Update(r *ghttp.Request) {
 	id := r.GetRouterVar("id").Uint64()
 
 	bodyMap := gconv.Map(r.GetBodyString())
